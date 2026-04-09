@@ -1,0 +1,26 @@
+package server.rem.mappers;
+
+import org.mapstruct.*;
+
+import server.rem.dtos.tag.CreateContactTagDto;
+import server.rem.entities.Business;
+import server.rem.entities.ContactTag;
+
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface ContactTagMapper {
+
+    // @Mapping(target = "id", ignore = true)
+    // @Mapping(target = "createdAt", ignore = true)
+    // @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "name", source = "dto.name")
+    @Mapping(target = "business", source = "business")
+    @Mapping(target = "isActive", expression = "java(dto.getIsActive() != null ? dto.getIsActive() : true)")
+    ContactTag toEntity(CreateContactTagDto dto, Business business);
+
+    @Mapping(target = "name", source = "dto.name")
+    @Mapping(target = "business", source = "business")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    void updateEntity(CreateContactTagDto dto, Business business, @MappingTarget ContactTag tag);
+}

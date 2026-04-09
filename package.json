@@ -1,0 +1,58 @@
+{
+  "name": "rem",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alicezuberg930/yvonne.git"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.6.3",
+    "typescript": "5.9.2",
+    "@changesets/changelog-github": "^0.5.2",
+    "@changesets/cli": "^2.29.8"
+  },
+  "bugs": {
+    "url": "https://github.com/alicezuberg930/yvonne/issues"
+  },
+  "catalog": {
+    "@tanstack/react-query": "^5.90.11",
+    "typescript": "5.9.2",
+    "tsdown": "^0.17.2",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.36.0",
+    "next": "^15.1.12"
+  },
+  "catalogs": {
+    "tailwind": {
+      "@tailwindcss/postcss": "^4",
+      "@tailwindcss/vite": "^4.1.15",
+      "tailwindcss": "^4"
+    },
+    "react": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0",
+      "@types/react": "^19",
+      "@types/react-dom": "^19"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://rem.vercel.app",
+  "packageManager": "bun@1.3.4",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev:web": "turbo run dev --filter=rem-web-dashboard",
+    "dev:server": "cd rem-server && ./mvnw spring-boot:run",
+    "deps:bump": "bunx npm-check-updates --deep -u && bun install",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "rem-server/*"
+  ]
+}

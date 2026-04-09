@@ -1,0 +1,15 @@
+services:
+  mysql:
+    image: 'mysql:9.6.0'
+    environment:
+      - 'MYSQL_DATABASE=rem_db'
+      - 'MYSQL_PASSWORD=123456'
+      - 'MYSQL_ROOT_PASSWORD=123456'
+      - 'MYSQL_USER=rem123'
+    ports:
+      - '3300:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
