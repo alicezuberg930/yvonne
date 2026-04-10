@@ -103,14 +103,21 @@ function SidebarMenuCollapsible({
       className='group/collapsible'
     >
       <SidebarMenuItem>
-        <CollapsibleTrigger>
-          <SidebarMenuButton tooltip={item.title}>
-            {item.icon && <item.icon />}
-            <span>{item.title}</span>
-            {item.badge && <NavBadge>{item.badge}</NavBadge>}
-            <ChevronRight className='ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180' />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
+        <CollapsibleTrigger
+          nativeButton={false}
+          render={
+            <SidebarMenuButton tooltip={item.title}
+              render={
+                <div>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                  {item.badge && <NavBadge>{item.badge}</NavBadge>}
+                  <ChevronRight className='ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180' />
+                </div>
+              }
+            />
+          }
+        />
         <CollapsibleContent className='CollapsibleContent'>
           <SidebarMenuSub>
             {item.items.map((subItem) => (

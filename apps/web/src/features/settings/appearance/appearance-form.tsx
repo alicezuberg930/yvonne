@@ -75,7 +75,7 @@ export function AppearanceForm() {
                     ))}
                   </select>
                 </FormControl>
-                <ChevronDownIcon className='absolute end-3 top-2.5 h-4 w-4 opacity-50' />
+                <ChevronDownIcon className='absolute inset-e-3 top-2.5 h-4 w-4 opacity-50' />
               </div>
               <FormDescription className='font-manrope'>
                 Set the font you want to use in the dashboard.
@@ -100,62 +100,81 @@ export function AppearanceForm() {
                 className='grid max-w-md grid-cols-2 gap-8 pt-2'
               >
                 <FormItem>
-                  <FormLabel className='flex flex-col cursor-pointer'>
-                    <FormControl>
-                      <RadioGroupItem 
-                        value='light' 
-                        className='sr-only'
-                      />
-                    </FormControl>
-                    <div className='items-center rounded-md border-2 border-muted p-1 hover:border-accent has-checked:border-primary'>
-                      <div className='space-y-2 rounded-sm bg-[#ecedef] p-2'>
-                        <div className='space-y-2 rounded-md bg-white p-2 shadow-xs'>
-                          <div className='h-2 w-20 rounded-lg bg-[#ecedef]' />
-                          <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
-                        </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs'>
-                          <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
-                          <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
-                        </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs'>
-                          <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
-                          <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
-                        </div>
-                      </div>
-                    </div>
-                    <span className='block w-full p-2 text-center font-normal'>
-                      Light
-                    </span>
-                  </FormLabel>
+                  <FormControl>
+                    <RadioGroupItem
+                      value='light'
+                      render={(props, state) => {
+                        const { checked } = state;
+
+                        return (
+                          <div className='flex flex-col cursor-pointer'>
+                            <div {...props}
+                              className={cn(
+                                'items-center rounded-md border-2 p-1 hover:border-accent',
+                                checked ? 'border-primary' : 'border-muted'
+                              )}
+                            >
+                              <div className='space-y-2 rounded-sm bg-[#ecedef] p-2'>
+                                <div className='space-y-2 rounded-md bg-white p-2 shadow-xs'>
+                                  <div className='h-2 w-20 rounded-lg bg-[#ecedef]' />
+                                  <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
+                                </div>
+                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs'>
+                                  <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
+                                  <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
+                                </div>
+                                <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs'>
+                                  <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
+                                  <div className='h-2 w-25 rounded-lg bg-[#ecedef]' />
+                                </div>
+                              </div>
+                            </div>
+                            <span className='block w-full p-2 text-center font-normal'>
+                              Light
+                            </span>
+                          </div>
+                        )
+                      }}
+                    />
+                  </FormControl>
                 </FormItem>
                 <FormItem>
-                  <FormLabel className='flex flex-col cursor-pointer'>
-                    <FormControl>
-                      <RadioGroupItem 
-                        value='dark' 
-                        className='sr-only'
-                      /> 
-                    </FormControl>
-                    <div className='items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground has-checked:border-primary'>
-                      <div className='space-y-2 rounded-sm bg-slate-950 p-2'>
-                        <div className='space-y-2 rounded-md bg-slate-800 p-2 shadow-xs'>
-                          <div className='h-2 w-20 rounded-lg bg-slate-400' />
-                          <div className='h-2 w-25 rounded-lg bg-slate-400' />
-                        </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs'>
-                          <div className='h-4 w-4 rounded-full bg-slate-400' />
-                          <div className='h-2 w-20 rounded-lg bg-slate-400' />
-                        </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs'>
-                          <div className='h-4 w-4 rounded-full bg-slate-400' />
-                          <div className='h-2 w-20 rounded-lg bg-slate-400' />
-                        </div>
-                      </div>
-                    </div>
-                    <span className='block w-full p-2 text-center font-normal'>
-                      Dark
-                    </span>
-                  </FormLabel>
+                  <FormControl>
+                    <RadioGroupItem
+                      value='dark'
+                      render={(props, state) => {
+                        const { checked } = state
+                        return (
+                          <div className='flex flex-col cursor-pointer'>
+                            <div {...props}
+                              className={cn(
+                                'items-center rounded-md border-2 p-1 bg-popover hover:bg-accent hover:text-accent-foreground',
+                                checked ? 'border-primary' : 'border-muted'
+                              )}
+                            >
+                              <div className='space-y-2 rounded-sm bg-slate-950 p-2'>
+                                <div className='space-y-2 rounded-md bg-slate-800 p-2 shadow-xs'>
+                                  <div className='h-2 w-20 rounded-lg bg-slate-400' />
+                                  <div className='h-2 w-25 rounded-lg bg-slate-400' />
+                                </div>
+                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs'>
+                                  <div className='h-4 w-4 rounded-full bg-slate-400' />
+                                  <div className='h-2 w-20 rounded-lg bg-slate-400' />
+                                </div>
+                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs'>
+                                  <div className='h-4 w-4 rounded-full bg-slate-400' />
+                                  <div className='h-2 w-20 rounded-lg bg-slate-400' />
+                                </div>
+                              </div>
+                            </div>
+                            <span className='block w-full p-2 text-center font-normal'>
+                              Dark
+                            </span>
+                          </div>
+                        )
+                      }}
+                    />
+                  </FormControl>
                 </FormItem>
               </RadioGroup>
             </FormItem>
