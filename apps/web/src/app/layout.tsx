@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import SnackbarProvider from "@/components/snackbar";
 import { ThemeProvider } from "@/context/theme-provider";
 import { DirectionProvider } from "@/context/direction-provider";
 import { FontProvider } from "@/context/font-provider";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/context/auth-provider";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -38,16 +39,18 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Suspense>
+          <Toaster duration={5000} />
           <TooltipProvider>
-            <SnackbarProvider>
-              <ThemeProvider>
-                <FontProvider>
-                  <DirectionProvider>
+
+            <ThemeProvider>
+              <FontProvider>
+                <DirectionProvider>
+                  <AuthProvider>
                     {children}
-                  </DirectionProvider>
-                </FontProvider>
-              </ThemeProvider>
-            </SnackbarProvider>
+                  </AuthProvider>
+                </DirectionProvider>
+              </FontProvider>
+            </ThemeProvider>
           </TooltipProvider>
         </Suspense>
       </body>

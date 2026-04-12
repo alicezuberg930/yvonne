@@ -65,54 +65,59 @@ export function NavUser({ user }: NavUserProps) {
               align='end'
               sideOffset={4}
             >
-              <DropdownMenuLabel className='p-0 font-normal'>
-                <div className='flex items-center gap-2 px-1 py-1.5 text-start text-sm'>
-                  <Avatar className='h-8 w-8 rounded-lg'>
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
-                  </Avatar>
-                  <div className='grid flex-1 text-start text-sm leading-tight'>
-                    <span className='truncate font-semibold'>{user.name}</span>
-                    <span className='truncate text-xs'>{user.email}</span>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className='p-0 font-normal'>
+                  <div className='flex items-center gap-2 px-1 py-1.5 text-start text-sm'>
+                    <Avatar className='h-8 w-8 rounded-lg'>
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
+                    </Avatar>
+                    <div className='grid flex-1 text-start text-sm leading-tight'>
+                      <span className='truncate font-semibold'>{user.name}</span>
+                      <span className='truncate text-xs'>{user.email}</span>
+                    </div>
                   </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Sparkles />
-                  Upgrade to Pro
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Sparkles />
+                    Upgrade to Pro
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    render={
+                      <Link href='/settings/account'>
+                        <BadgeCheck />
+                        Account
+                      </Link>
+                    }
+                  />
+                  <DropdownMenuItem
+                    render={
+                      <Link href='/settings'>
+                        <CreditCard />
+                        Billing
+                      </Link>
+                    }
+                  />
+                  <DropdownMenuItem
+                    render={
+                      <Link href='/settings/notifications'>
+                        <Bell />
+                        Notifications
+                      </Link>
+                    }
+                  />
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant='destructive' onClick={() => setOpen(true)}>
+                  <LogOut />
+                  Sign out
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link href='/settings/account'>
-                    <BadgeCheck />
-                    Account
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link href='/settings'>
-                    <CreditCard />
-                    Billing
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link href='/settings/notifications'>
-                    <Bell />
-                    Notifications
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant='destructive'
-                onClick={() => setOpen(true)}
-              >
-                <LogOut />
-                Sign out
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

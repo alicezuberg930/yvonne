@@ -1,4 +1,4 @@
-package server.rem.dtos.users;
+package server.rem.dtos.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInUserDto {
+public class SignInUserRequest {
     @NotBlank
     @Email
     private String email;

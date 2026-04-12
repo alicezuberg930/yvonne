@@ -1,4 +1,4 @@
-package server.rem.dtos.users;
+package server.rem.dtos.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignUpUserDto {
+public class SignUpUserRequest {
     @NotBlank(message = "Fullname is required")
     @Size(max = 100)
     private String fullname;

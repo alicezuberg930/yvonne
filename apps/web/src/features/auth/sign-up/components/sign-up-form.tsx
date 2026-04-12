@@ -18,23 +18,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { FormProvider, RHFPasswordField, RHFTextField } from '@/components/hook-form'
 import { FieldGroup } from '@/components/ui/field'
-
-const formSchema = z
-  .object({
-    email: z.email({
-      error: (iss) =>
-        iss.input === '' ? 'Please enter your email' : undefined,
-    }),
-    password: z
-      .string()
-      .min(1, 'Please enter your password')
-      .min(7, 'Password must be at least 7 characters long'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
-    path: ['confirmPassword'],
-  })
+import { AuthValidators } from '@/validators/auth'
 
 export function SignUpForm({
   className,
@@ -42,8 +26,8 @@ export function SignUpForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<AuthValidators.SignUp>({
+    resolver: zodResolver(AuthValidators.signUpSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -53,7 +37,7 @@ export function SignUpForm({
 
   const { handleSubmit } = form
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: AuthValidators.SignUp) {
     setIsLoading(true)
     // eslint-disable-next-line no-console
     console.log(data)

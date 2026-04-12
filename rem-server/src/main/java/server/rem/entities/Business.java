@@ -8,7 +8,7 @@ import server.rem.enums.MailProvider;
 import server.rem.enums.PhoneDriver;
 
 import java.time.LocalTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "businesses")
@@ -21,13 +21,12 @@ public class Business extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_user_id", nullable = false)
     // @JsonBackReference
-    @JsonIgnoreProperties({ "businessesOwned", "businesses" })
+    @JsonIgnoreProperties({ "businessesOwner" })
     private User owner;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "business_user", joinColumns = @JoinColumn(name = "business_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    @JsonIgnoreProperties("businesses")
-    private Set<User> users;
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "user", "invitor" })
+    private List<BusinessUser> businessUsers;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;

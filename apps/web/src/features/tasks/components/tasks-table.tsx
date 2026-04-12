@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
-import { useTableUrlState } from '@/hooks/use-table-url-state'
+import { useTableUrlState } from '@/hooks/useTableUrlState'
 import {
   Table,
   TableBody,
@@ -34,10 +34,7 @@ type DataTableProps = {
 }
 
 export function TasksTable({ data }: DataTableProps) {
-  const { searchParams, setQuery } = useQueryState()
-  const search: Record<string, string | undefined> = useMemo(() => {
-    return Object.fromEntries(searchParams!.entries())
-  }, [searchParams])
+  const { search, setQuery: navigate } = useQueryState()
 
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
@@ -60,7 +57,7 @@ export function TasksTable({ data }: DataTableProps) {
     ensurePageInRange,
   } = useTableUrlState({
     search,
-    navigate: setQuery,
+    navigate,
     pagination: { defaultPage: 1, defaultPageSize: 10 },
     globalFilter: { enabled: true, key: 'filter' },
     columnFilters: [
@@ -71,6 +68,7 @@ export function TasksTable({ data }: DataTableProps) {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
+    autoResetPageIndex: false,
     data,
     columns,
     state: {

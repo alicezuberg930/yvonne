@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AuthLayout } from '../auth-layout'
-import { UserAuthForm } from './components/user-auth-form'
+import { SignInForm } from './components/sign-in-form'
 
 export function SignIn() {
   return (
@@ -21,7 +21,7 @@ export function SignIn() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UserAuthForm redirectTo={'dashboard'} />
+          <SignInForm redirectTo={'businesses'} />
         </CardContent>
         <CardFooter>
           <p className='px-8 text-center text-sm text-muted-foreground'>

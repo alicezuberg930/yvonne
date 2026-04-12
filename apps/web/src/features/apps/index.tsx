@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { ConfigDrawer } from '@/components/config-drawer'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
+import { Header } from '@/layout/header'
+import { Main } from '@/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -29,11 +29,11 @@ const appText = new Map<AppType, string>([
 ])
 
 export function Apps() {
-  const { searchParams, setQuery } = useQueryState()
+  const { search, setQuery } = useQueryState()
 
-  const filter = searchParams?.get('filter') ?? ''
-  const type = (searchParams?.get('type') as AppType) ?? 'all'
-  const initSort = (searchParams?.get('sort') as 'asc' | 'desc') ?? 'asc'
+  const filter = search?.['filter'] ?? ''
+  const type = (search?.['type'] as AppType) ?? 'all'
+  const initSort = (search?.['sort'] as 'asc' | 'desc') ?? 'asc'
 
   const [sort, setSort] = useState(initSort)
   const [appType, setAppType] = useState(type)

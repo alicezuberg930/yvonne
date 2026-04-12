@@ -7,14 +7,19 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.business.AddUserToBusinessDto;
+import server.rem.dtos.business.BusinessResponse;
 import server.rem.dtos.business.CreateBusinessDto;
 import server.rem.dtos.business.UpdateBusinessDto;
 import server.rem.entities.Business;
 import server.rem.entities.User;
 import server.rem.services.BusinessService;
+import server.rem.views.Views;
 
 import java.util.List;
 
@@ -33,8 +38,9 @@ public class BusinessController {
         ));
     }
 
+    @JsonView(Views.Business.class)  
     @GetMapping
-    public ResponseEntity<APIResponse<List<Business>>> getAllBusinesses(@Nullable @RequestUser String userId) {
+    public ResponseEntity<APIResponse<List<BusinessResponse>>> getAllBusinesses(@Nullable @RequestUser String userId) {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
                 "Business list retrieved successfully",

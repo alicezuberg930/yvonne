@@ -1,11 +1,10 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type {
   ColumnFiltersState,
   OnChangeFn,
   PaginationState,
 } from '@tanstack/react-table'
-import { ReadonlyURLSearchParams } from 'next/navigation'
 
 type SearchRecord = Record<string, string | undefined>
 
@@ -101,6 +100,12 @@ export function useTableUrlState(
         }
       } else {
         // default to array type
+        let parsed: unknown[] = []
+        try {
+          parsed = raw ? JSON.parse(raw) : []
+        } catch {
+          parsed = []
+        }
         const value = (deserialize(raw) as unknown[]) ?? []
         if (Array.isArray(value) && value.length > 0) {
           collected.push({ id: cfg.columnId, value })
@@ -115,9 +120,9 @@ export function useTableUrlState(
   const pagination: PaginationState = useMemo(() => {
     const rawPage = search[pageKey]
     const rawPageSize = search[pageSizeKey]
-    const pageNum = typeof rawPage === 'number' ? rawPage : defaultPage
-    const pageSizeNum = typeof rawPageSize === 'number' ? rawPageSize : defaultPageSize
-    return { pageIndex: Math.max(0, pageNum - 1), pageSize: pageSizeNum }
+    const pageNum = !isNaN(parseInt(rawPage!)) ? parseInt(rawPage!) : defaultPage
+    const pageSizeNum = !isNaN(parseInt(rawPageSize!)) ? parseInt(rawPageSize!) : defaultPageSize
+    return { pageIndex: Math.max(0, pageNum - 1), pageSize: pageSizeNum, }
   }, [search, pageKey, pageSizeKey, defaultPage, defaultPageSize])
 
   const onPaginationChange: OnChangeFn<PaginationState> = (updater) => {
@@ -129,6 +134,8 @@ export function useTableUrlState(
       [pageKey]: nextPage <= defaultPage ? undefined : String(nextPage),
       [pageSizeKey]: nextPageSize === defaultPageSize ? undefined : String(nextPageSize),
     }
+    console.log("onPaginationChange ran")
+    console.log(updates)
     navigate(updates)
   }
 
@@ -138,45 +145,41 @@ export function useTableUrlState(
     return typeof raw === 'string' ? raw : ''
   })
 
-  const onGlobalFilterChange: OnChangeFn<string> | undefined =
-    globalFilterEnabled
-      ? (updater) => {
-        const next = typeof updater === 'function' ? updater(globalFilter ?? '') : updater
-        const value = trimGlobal ? next.trim() : next
-        setGlobalFilter(value)
-        const updates: Record<string, string | undefined> = {
-          ...search,
-          [pageKey]: undefined,
-          [globalFilterKey]: value ? value : undefined,
-        }
-        navigate(updates)
-      }
-      : undefined
+  const onGlobalFilterChange: OnChangeFn<string> | undefined = globalFilterEnabled ? (updater) => {
+    const next = typeof updater === 'function' ? updater(globalFilter ?? '') : updater
+    const value = trimGlobal ? next.trim() : next
+    setGlobalFilter(value)
+    const updates: Record<string, string | undefined> = {
+      ...search,
+      [pageKey]: undefined,
+      [globalFilterKey]: value ? value : undefined,
+    }
+    console.log("onGlobalFilterChange ran")
+    navigate(updates)
+  } : undefined
 
   const onColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (updater) => {
     const next = typeof updater === 'function' ? updater(columnFilters) : updater
     setColumnFilters(next)
-
     const patch: Record<string, unknown> = {}
-
     for (const cfg of columnFiltersCfg) {
       const found = next.find((f) => f.id === cfg.columnId)
       const serialize = cfg.serialize ?? ((v: unknown) => v)
       if (cfg.type === 'string') {
         const value = typeof found?.value === 'string' ? (found.value as string) : ''
-        patch[cfg.searchKey] = value.trim() !== '' ? serialize(value) : undefined
+        patch[cfg.searchKey] = value.trim() !== '' ? String(serialize(value)) : undefined
       } else {
-        const value = Array.isArray(found?.value)
-          ? (found!.value as unknown[])
-          : []
-        patch[cfg.searchKey] = value.length > 0 ? serialize(value) : undefined
+        const value = Array.isArray(found?.value) ? (found!.value as unknown[]) : []
+        patch[cfg.searchKey] = value.length > 0 ? JSON.stringify(serialize(value)) : undefined
       }
     }
     const updates: Record<string, string | undefined> = {
       ...search,
       [pageKey]: undefined,
-      ...(patch as Record<string, string | undefined>),
+      ...patch as Record<string, undefined>,
     }
+    console.log("onColumnFiltersChange ran")
+    console.log(updates)
     navigate(updates)
   }
 
@@ -185,9 +188,8 @@ export function useTableUrlState(
     opts: { resetTo?: 'first' | 'last' } = { resetTo: 'first' }
   ) => {
     const currentPage = search[pageKey]
-    const pageNum = typeof currentPage === 'number' ? currentPage : defaultPage
+    const pageNum = !isNaN(parseInt(currentPage!)) ? parseInt(currentPage!) : defaultPage
     if (pageCount > 0 && pageNum > pageCount) {
-
       const updates: Record<string, string | undefined> = {
         ...search,
         [pageKey]: opts.resetTo === 'last' ? String(pageCount) : undefined,

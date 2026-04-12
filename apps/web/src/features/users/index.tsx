@@ -1,7 +1,7 @@
 'use client'
 import { ConfigDrawer } from '@/components/config-drawer'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
+import { Header } from '@/layout/header'
+import { Main } from '@/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -11,13 +11,10 @@ import { UsersProvider } from './components/users-provider'
 import { UsersTable } from './components/users-table'
 import { users } from './data/users'
 import useQueryState from '@/hooks/useQueryState'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export function Users() {
-  const { searchParams, setQuery } = useQueryState()
-  const search: Record<string, string | undefined> = useMemo(() => {
-    return Object.fromEntries(searchParams!.entries())
-  }, [searchParams])
+  const { setQuery: navigate, search } = useQueryState()
 
   return (
     <UsersProvider>
@@ -40,7 +37,7 @@ export function Users() {
           </div>
           <UsersPrimaryButtons />
         </div>
-        <UsersTable data={users} search={search} navigate={setQuery} />
+        <UsersTable data={users} search={search} navigate={navigate} />
       </Main>
 
       <UsersDialogs />

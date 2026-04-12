@@ -1,5 +1,7 @@
 package server.rem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +20,7 @@ public class BusinessUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("businessId") // maps to BusinessUserId.businessId
     @JoinColumn(name = "business_id", nullable = false)
+    @JsonIgnoreProperties({ "owner", "businessUsers", "businessesOwned" })
     private Business business;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -59,12 +59,12 @@ public class User extends Base {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // @JsonManagedReference
-    @JsonIgnoreProperties({ "owner", "users" })
+    @JsonIgnoreProperties({ "owner", "users", "businessUsers" })
     private List<Business> businessesOwned;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("users")
-    private Set<Business> businesses;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "user", "invitor" })
+    private List<BusinessUser> businessUsers;
 
     // @OneToMany(mappedBy = "invitor")
     // private List<BusinessUser> sentInvitations;

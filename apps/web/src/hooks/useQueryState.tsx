@@ -1,22 +1,28 @@
 'use client'
-import { useRouter, useSearchParams } from "next/navigation"
+import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation"
+import { useCallback, useMemo } from "react"
 
 const useQueryState = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
 
-    const setQuery = (updates: Record<string, string | undefined>) => {
+    const search: Record<string, string | undefined> = useMemo(() => {
+        return Object.fromEntries(searchParams!.entries())
+    }, [searchParams])
+
+    const setQuery = useCallback((records: Record<string, string | undefined>) => {
         const params = new URLSearchParams(searchParams?.toString())
-
-        Object.entries(updates).forEach(([key, value]) => {
-            if (!value) params.delete(key)
-            else params.set(key, value)
+        Object.entries(records).forEach(([key, value]) => {
+            if (value === undefined || value === null || value === '') {
+                params.delete(key)
+            } else {
+                params.set(key, value)
+            }
         })
+        router.push(`?${params.toString()}`, { scroll: false })
+    }, [router])
 
-        router.push(`?${params.toString()}`)
-    }
-
-    return { searchParams, setQuery }
+    return { setQuery, search }
 }
 
 export default useQueryState

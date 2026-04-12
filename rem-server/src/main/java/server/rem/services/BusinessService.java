@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import server.rem.dtos.business.AddUserToBusinessDto;
+import server.rem.dtos.business.BusinessResponse;
 import server.rem.dtos.business.CreateBusinessDto;
 import server.rem.dtos.business.UpdateBusinessDto;
 import server.rem.entities.Business;
@@ -43,7 +44,7 @@ public class BusinessService {
     private final AddUserToBusinessMapper addUserToBusinessMapper;
     private final RoleRepository roleRepository;
 
-    public List<Business> getAllBusinesses(@Nullable String userId) {
+    public List<BusinessResponse> getAllBusinesses(@Nullable String userId) {
         List<Business> businesses = List.of();
         if (userId != null) {
             Optional<User> user = userRepository.findById(userId);
@@ -51,7 +52,7 @@ public class BusinessService {
         } else {
             businesses = businessRepository.findAll();
         }
-        return businesses;
+        return businessMapper.toBusinessesResponse(businesses);
     }
 
     public Business createBusinesses(String userId, CreateBusinessDto dto) {

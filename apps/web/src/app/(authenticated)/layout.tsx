@@ -1,4 +1,4 @@
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
+import { AuthenticatedLayout } from "@/layout/authenticated-layout";
 
 export default function layout({ children }: { children: React.ReactNode }) {
     return (

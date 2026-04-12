@@ -21,6 +21,9 @@ import {
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
+  Clock,
+  LayoutTemplate,
+  Megaphone
 } from 'lucide-react'
 import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
@@ -95,6 +98,31 @@ export const sidebarData: SidebarData = {
               url: '/clerk/user-management',
             },
           ],
+        },
+      ],
+    },
+    {
+      title: 'CRM',
+      items: [
+        {
+          title: 'Templates',
+          url: '/templates',
+          icon: LayoutTemplate,
+        },
+        {
+          title: 'Campaigns',
+          url: '/campaigns',
+          icon: Megaphone,
+        },
+      ],
+    },
+    {
+      title: 'HRM',
+      items: [
+        {
+          title: 'Attendances',
+          url: '/attendances',
+          icon: Clock,
         },
       ],
     },

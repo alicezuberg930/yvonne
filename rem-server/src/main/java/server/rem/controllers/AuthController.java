@@ -11,12 +11,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.users.SignInUserDto;
-import server.rem.dtos.users.SignUpUserDto;
-import server.rem.entities.User;
+import server.rem.dtos.auth.RoleResponse;
+import server.rem.dtos.auth.SignInUserRequest;
+import server.rem.dtos.auth.SignInUserResponse;
+import server.rem.dtos.auth.SignUpUserRequest;
+import server.rem.dtos.auth.UserProfileResponse;
 import server.rem.services.AuthService;
+import server.rem.views.Views;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,10 +34,10 @@ public class AuthController {
     private String jwtExpirationInS;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<APIResponse<String>> signIn(@Valid @RequestBody SignInUserDto dto, HttpServletResponse response) {
-        String token = authService.signIn(dto);
+    public ResponseEntity<APIResponse<SignInUserResponse>> signIn(@Valid @RequestBody SignInUserRequest dto, HttpServletResponse response) {
+        SignInUserResponse signInResponse = authService.signIn(dto);
         ResponseCookie cookie = ResponseCookie
-                .from("ACCESS_TOKEN", token)
+                .from("ACCESS_TOKEN", signInResponse.getAccessToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -44,24 +50,33 @@ public class AuthController {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
                 "User signed in successfully",
-                token
+                signInResponse
             )
         );
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<APIResponse<SignUpUserDto>> signUp(@Valid @RequestBody SignUpUserDto dto) {
+    public ResponseEntity<APIResponse<SignUpUserRequest>> signUp(@Valid @RequestBody SignUpUserRequest dto) {
         return ResponseEntity.status(201).body(APIResponse.success(
                 201,
                 "User signed up successfully",
                 authService.signUp(dto)));
     }
 
+    @JsonView(Views.Public.class)
     @GetMapping("/me")
-    public ResponseEntity<APIResponse<User>> profile(@RequestUser String userId) {
+    public ResponseEntity<APIResponse<UserProfileResponse>> profile(@RequestUser String userId) {
         return ResponseEntity.status(200).body(APIResponse.success(
                 200,
                 "Profile fetched successfully",
                 authService.profile(userId)));
+    }
+
+    @JsonView(Views.Public.class)
+    public ResponseEntity<APIResponse<RoleResponse>> getCurrentRole(@RequestUser String userId, @RequestParam("businessId") String businessId) {
+        return ResponseEntity.status(200).body(APIResponse.success(
+                200,
+                "Profile fetched successfully",
+                authService.getCurrentRole(userId, businessId)));
     }
 }

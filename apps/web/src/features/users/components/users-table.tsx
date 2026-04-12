@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
-import { type NavigateFn, useTableUrlState } from '@/hooks/use-table-url-state'
+import { type NavigateFn, useTableUrlState } from '@/hooks/useTableUrlState'
 import {
   Table,
   TableBody,
@@ -66,6 +66,7 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
+    autoResetPageIndex: false,
     data,
     columns,
     state: {
