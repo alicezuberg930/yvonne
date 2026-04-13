@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
-import { useTableUrlState } from '@/hooks/useTableUrlState'
+import { type NavigateFn, useTableUrlState } from '@/hooks/useTableUrlState'
 import {
   Table,
   TableBody,
@@ -23,33 +23,29 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
-import { priorities, statuses } from '../data/data'
-import { type Task } from '../data/schema'
+import { roles } from '../data/data'
+import { type User } from '../data/schema'
 import { DataTableBulkActions } from './data-table-bulk-actions'
-import { tasksColumns as columns } from './tasks-columns'
-import useQueryState from '@/hooks/useQueryState'
+import { usersColumns as columns } from './users-columns'
 
 type DataTableProps = {
-  data: Task[]
+  data: User[]
+  search: Record<string, string | undefined>
+  navigate: NavigateFn
 }
 
-export function TasksTable({ data }: DataTableProps) {
-  const { search, navigate } = useQueryState()
-
+export function TemplatesTable({ data, search, navigate }: DataTableProps) {
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
-  const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [sorting, setSorting] = useState<SortingState>([])
 
   // Local state management for table (uncomment to use local-only state, not synced with URL)
-  // const [globalFilter, onGlobalFilterChange] = useState('')
   // const [columnFilters, onColumnFiltersChange] = useState<ColumnFiltersState>([])
   // const [pagination, onPaginationChange] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
 
-  // Synced with URL states (updated to match route search schema defaults)
+  // Synced with URL states (keys/defaults mirror users route search schema)
   const {
-    globalFilter,
-    onGlobalFilterChange,
     columnFilters,
     onColumnFiltersChange,
     pagination,
@@ -59,10 +55,12 @@ export function TasksTable({ data }: DataTableProps) {
     search,
     navigate,
     pagination: { defaultPage: 1, defaultPageSize: 10 },
-    globalFilter: { enabled: true, key: 'filter' },
+    globalFilter: { enabled: false },
     columnFilters: [
+      // username per-column text filter
+      { columnId: 'username', searchKey: 'username', type: 'string' },
       { columnId: 'status', searchKey: 'status', type: 'array' },
-      { columnId: 'priority', searchKey: 'priority', type: 'array' },
+      { columnId: 'role', searchKey: 'role', type: 'array' },
     ],
   })
 
@@ -73,38 +71,28 @@ export function TasksTable({ data }: DataTableProps) {
     columns,
     state: {
       sorting,
-      columnVisibility,
+      pagination,
       rowSelection,
       columnFilters,
-      globalFilter,
-      pagination,
+      columnVisibility,
     },
     enableRowSelection: true,
+    onPaginationChange,
+    onColumnFiltersChange,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
-    globalFilterFn: (row, _columnId, filterValue) => {
-      const id = String(row.getValue('id')).toLowerCase()
-      const title = String(row.getValue('title')).toLowerCase()
-      const searchValue = String(filterValue).toLowerCase()
-
-      return id.includes(searchValue) || title.includes(searchValue)
-    },
+    getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    onPaginationChange,
-    onGlobalFilterChange,
-    onColumnFiltersChange,
   })
 
-  const pageCount = table.getPageCount()
   useEffect(() => {
-    ensurePageInRange(pageCount)
-  }, [pageCount, ensurePageInRange])
+    ensurePageInRange(table.getPageCount())
+  }, [table, ensurePageInRange])
 
   return (
     <div
@@ -115,31 +103,38 @@ export function TasksTable({ data }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter by title or ID...'
+        searchPlaceholder='Filter users...'
+        searchKey='username'
         filters={[
           {
             columnId: 'status',
             title: 'Status',
-            options: statuses,
+            options: [
+              { label: 'Active', value: 'active' },
+              { label: 'Inactive', value: 'inactive' },
+              { label: 'Invited', value: 'invited' },
+              { label: 'Suspended', value: 'suspended' },
+            ],
           },
           {
-            columnId: 'priority',
-            title: 'Priority',
-            options: priorities,
+            columnId: 'role',
+            title: 'Role',
+            options: roles.map((role) => ({ ...role })),
           },
         ]}
       />
       <div className='overflow-hidden rounded-md border'>
-        <Table className='min-w-xl'>
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className='group/row'>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
+                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
                         header.column.columnDef.meta?.className,
                         header.column.columnDef.meta?.thClassName
                       )}
@@ -162,11 +157,13 @@ export function TasksTable({ data }: DataTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='group/row'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
                       className={cn(
+                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
                         cell.column.columnDef.meta?.className,
                         cell.column.columnDef.meta?.tdClassName
                       )}

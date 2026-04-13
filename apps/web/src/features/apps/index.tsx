@@ -29,7 +29,7 @@ const appText = new Map<AppType, string>([
 ])
 
 export function Apps() {
-  const { search, setQuery } = useQueryState()
+  const { search, navigate } = useQueryState()
 
   const filter = search?.['filter'] ?? ''
   const type = (search?.['type'] as AppType) ?? 'all'
@@ -56,20 +56,20 @@ export function Apps() {
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
-    setQuery({ filter: e.target.value || undefined })
+    navigate({ filter: e.target.value || undefined })
   }
 
   const handleTypeChange = (value: AppType | null) => {
     if (value !== null) {
       setAppType(value)
-      setQuery({ type: value === 'all' ? undefined : value })
+      navigate({ type: value === 'all' ? undefined : value })
     }
   }
 
   const handleSortChange = (sort: 'asc' | 'desc' | null) => {
     if (sort !== null) {
       setSort(sort)
-      setQuery({ sort })
+      navigate({ sort })
     }
   }
 

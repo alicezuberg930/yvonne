@@ -2,7 +2,6 @@ package server.rem.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
@@ -73,10 +72,11 @@ public class AuthController {
     }
 
     @JsonView(Views.Public.class)
+    @GetMapping("/role")
     public ResponseEntity<APIResponse<RoleResponse>> getCurrentRole(@RequestUser String userId, @RequestParam("businessId") String businessId) {
         return ResponseEntity.status(200).body(APIResponse.success(
                 200,
-                "Profile fetched successfully",
+                "Role fetched successfully",
                 authService.getCurrentRole(userId, businessId)));
     }
 }

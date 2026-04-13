@@ -41,7 +41,6 @@ export default function RootLayout({
         <Suspense>
           <Toaster duration={5000} />
           <TooltipProvider>
-
             <ThemeProvider>
               <FontProvider>
                 <DirectionProvider>

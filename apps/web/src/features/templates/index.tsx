@@ -8,13 +8,13 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { UsersDialogs } from './components/users-dialogs'
 import { UsersPrimaryButtons } from './components/users-primary-buttons'
 import { UsersProvider } from './components/users-provider'
-import { UsersTable } from './components/users-table'
+import { TemplatesTable } from './components/templates-table'
 import { users } from './data/users'
 import useQueryState from '@/hooks/useQueryState'
 
-export function Users() {
+export function Templates() {
   const { navigate, search } = useQueryState()
-
+  
   return (
     <UsersProvider>
       <Header fixed>
@@ -31,12 +31,12 @@ export function Users() {
           <div>
             <h2 className='text-2xl font-bold tracking-tight'>User List</h2>
             <p className='text-muted-foreground'>
-              Manage your users and their roles here.
+              Manage your marketing templates here.
             </p>
           </div>
           <UsersPrimaryButtons />
         </div>
-        <UsersTable data={users} search={search} navigate={navigate} />
+        <TemplatesTable data={users} search={search} navigate={navigate} />
       </Main>
 
       <UsersDialogs />

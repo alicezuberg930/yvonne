@@ -2,6 +2,7 @@ package server.rem.interceptors;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -22,6 +23,7 @@ import server.rem.entities.Permission;
 import server.rem.repositories.BusinessUserRepository;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +44,21 @@ public class BusinessContextFilter extends OncePerRequestFilter {
     private static final ConcurrentHashMap<String, Map<String, Set<Permission>>> permissionMap = new ConcurrentHashMap<>();
     private final BusinessUserRepository businessUserRepository;
 
+    private String extractBusinessId(HttpServletRequest request) {
+        String businessHeader = request.getHeader("X-Business-Id");
+        if (businessHeader != null) return businessHeader;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                    .filter(c -> c.getName().equals("X-Business-Id"))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -54,7 +71,7 @@ public class BusinessContextFilter extends OncePerRequestFilter {
                 Boolean isUser = authentication.getPrincipal() instanceof User;
                 String userId = isUser ? ((User) authentication.getPrincipal()).getId() : null;
                 // Extract businessId from request header
-                String businessId = request.getHeader("X-Business-Id");
+                String businessId = extractBusinessId(request);
 
                 if (userId != null && businessId != null && !businessId.isEmpty()) {
                     // Check cache first to avoid database queries on every request

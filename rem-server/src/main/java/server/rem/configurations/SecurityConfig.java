@@ -17,8 +17,8 @@ import server.rem.interceptors.BusinessContextFilter;
 @EnableMethodSecurity(prePostEnabled = true) // Enable method-level security with @PreAuthorize and @PostAuthorize
 public class SecurityConfig {
         private static final String[] PUBLIC_ROUTES = {
-                        "/auth/**",
-                        "/actuator/health",
+                        "/auth/sign-in",
+                        "/auth/sign-up",
                         // "/businesses/**",
                         // "/leaves/**",
                         // "/users/**",

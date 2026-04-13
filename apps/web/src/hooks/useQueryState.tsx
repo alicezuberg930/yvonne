@@ -1,5 +1,5 @@
 'use client'
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
 const useQueryState = () => {
@@ -10,7 +10,7 @@ const useQueryState = () => {
         return Object.fromEntries(searchParams!.entries())
     }, [searchParams])
 
-    const setQuery = useCallback((records: Record<string, string | undefined>) => {
+    const navigate = useCallback((records: Record<string, string | undefined>) => {
         const params = new URLSearchParams(searchParams?.toString())
         Object.entries(records).forEach(([key, value]) => {
             if (value === undefined || value === null || value === '') {
@@ -22,7 +22,7 @@ const useQueryState = () => {
         router.push(`?${params.toString()}`, { scroll: false })
     }, [router])
 
-    return { setQuery, search }
+    return { navigate, search }
 }
 
 export default useQueryState

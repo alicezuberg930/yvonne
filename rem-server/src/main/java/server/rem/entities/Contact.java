@@ -60,7 +60,7 @@ public class Contact extends Base {
     @Column(name = "occupation", nullable = true)
     private String occupation;
 
-    @Column(name = "tax_code", nullable = false)
+    @Column(name = "tax_code", nullable = true)
     private String taxCode;
 
     @Column(name = "website", nullable = true)
