@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,13 +28,21 @@ public class CampaignController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('campaign.create')")
-    public ResponseEntity<APIResponse<Campaign>> createCampaign(@Valid @RequestBody CreateCampaignDto dto) {
+    public ResponseEntity<APIResponse<Campaign>> createCampaign(
+        @Valid @RequestBody CreateCampaignDto dto, 
+        @RequestAttribute("businessId") String businessId
+    ) throws Exception {
         return ResponseEntity.ok().body(APIResponse.success(
             201,
             "Campaigns created successfully",
-            campaignService.createCampaign(dto))
+            campaignService.createCampaign(dto, businessId))
         );
     }
+
+    // update campaign
+        //   if (campaign.getSendType() == CampaignSendType.SCHEDULED) {
+        //     campaignSchedulerService.rescheduleCampaign(campaign);
+        // }
 
     @GetMapping
     @PreAuthorize("hasAuthority('campaign.view')")

@@ -86,14 +86,10 @@ public class BusinessContextFilter extends OncePerRequestFilter {
                         // If permissions are not cached then query from database
                         BusinessUser businessUser = businessUserRepository
                                 .findByUserIdAndBusinessId(userId, businessId)
-                                .orElseThrow(() -> new AccessDeniedException(
-                                        "User does not have access to business: " + businessId));
+                                .orElseThrow(() -> new AccessDeniedException("User does not have access to business: " + businessId));
 
                         Role role = businessUser.getRole();
                         Set<Permission> permissions = role.getPermissions();
-                        System.out.println(permissions != null
-                                ? permissions.stream().map(Permission::getName).collect(Collectors.joining(", "))
-                                : "No cached permissions");
 
                         // Update cache for future requests
                         permissionMap
@@ -102,9 +98,6 @@ public class BusinessContextFilter extends OncePerRequestFilter {
 
                         setBusinessContextInRequest(request, businessId, permissions, userId);
                     }
-                    System.out.println(cachedPermissions != null
-                            ? cachedPermissions.stream().map(Permission::getName).collect(Collectors.joining(", "))
-                            : "No cached permissions");
                 }
             }
             filterChain.doFilter(request, response);

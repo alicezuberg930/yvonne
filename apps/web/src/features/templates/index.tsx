@@ -5,18 +5,27 @@ import { Main } from '@/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { UsersDialogs } from './components/users-dialogs'
-import { UsersPrimaryButtons } from './components/users-primary-buttons'
-import { UsersProvider } from './components/users-provider'
+import { TemplatesDialogs } from './components/templates-dialogs'
+import { TemplatesPrimaryButtons } from './components/templates-primary-buttons'
+import { TemplatesProvider } from './components/templates-provider'
 import { TemplatesTable } from './components/templates-table'
-import { users } from './data/users'
-import useQueryState from '@/hooks/useQueryState'
+import { getTemplates as gt } from '@/lib/repository/api'
+import { useEffect, useState } from 'react'
+import { Template } from '@/@types'
 
 export function Templates() {
-  const { navigate, search } = useQueryState()
-  
+  const [templates, setTemplates] = useState<Template[]>([])
+
+  useEffect(() => {
+    const getTemplates = async () => {
+      const response = await gt()
+      setTemplates(response.data)
+    }
+    getTemplates()
+  }, [])
+
   return (
-    <UsersProvider>
+    <TemplatesProvider>
       <Header fixed>
         <Search />
         <div className='ms-auto flex items-center space-x-4'>
@@ -29,17 +38,17 @@ export function Templates() {
       <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
         <div className='flex flex-wrap items-end justify-between gap-2'>
           <div>
-            <h2 className='text-2xl font-bold tracking-tight'>User List</h2>
+            <h2 className='text-2xl font-bold tracking-tight'>Template List</h2>
             <p className='text-muted-foreground'>
               Manage your marketing templates here.
             </p>
           </div>
-          <UsersPrimaryButtons />
+          <TemplatesPrimaryButtons />
         </div>
-        <TemplatesTable data={users} search={search} navigate={navigate} />
+        <TemplatesTable data={templates} />
       </Main>
 
-      <UsersDialogs />
-    </UsersProvider>
+      <TemplatesDialogs />
+    </TemplatesProvider>
   )
 }

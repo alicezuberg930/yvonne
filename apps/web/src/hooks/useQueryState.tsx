@@ -7,7 +7,7 @@ const useQueryState = () => {
     const searchParams = useSearchParams()
 
     const search: Record<string, string | undefined> = useMemo(() => {
-        return Object.fromEntries(searchParams!.entries())
+        return Object.fromEntries(searchParams?.entries())
     }, [searchParams])
 
     const navigate = useCallback((records: Record<string, string | undefined>) => {

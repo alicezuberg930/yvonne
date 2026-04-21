@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import server.rem.annotations.RequestUser;
+import server.rem.common.messages.AuthMessages;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.auth.RoleResponse;
 import server.rem.dtos.auth.SignInUserRequest;
@@ -28,9 +29,9 @@ import server.rem.views.Views;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    
+
     @Value("${jwt.expiration}")
-    private String jwtExpirationInS;
+    private String expireIn;
 
     @PostMapping("/sign-in")
     public ResponseEntity<APIResponse<SignInUserResponse>> signIn(@Valid @RequestBody SignInUserRequest dto, HttpServletResponse response) {
@@ -40,7 +41,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(Duration.ofSeconds(Long.parseLong(jwtExpirationInS)))
+                .maxAge(Duration.ofSeconds(Long.parseLong(expireIn)))
                 .sameSite("Strict")
                 .build();
 
@@ -48,10 +49,8 @@ public class AuthController {
 
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
-                "User signed in successfully",
-                signInResponse
-            )
-        );
+                AuthMessages.LOGIN_SUCCESS(signInResponse.getUser().getFullname()),
+                signInResponse));
     }
 
     @PostMapping("/sign-up")
@@ -73,7 +72,8 @@ public class AuthController {
 
     @JsonView(Views.Public.class)
     @GetMapping("/role")
-    public ResponseEntity<APIResponse<RoleResponse>> getCurrentRole(@RequestUser String userId, @RequestParam("businessId") String businessId) {
+    public ResponseEntity<APIResponse<RoleResponse>> getCurrentRole(@RequestUser String userId,
+            @RequestParam("businessId") String businessId) {
         return ResponseEntity.status(200).body(APIResponse.success(
                 200,
                 "Role fetched successfully",

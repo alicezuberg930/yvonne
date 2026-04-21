@@ -25,7 +25,7 @@ import server.rem.services.CloudinaryService;
 public class CloudinaryController {
     private final CloudinaryService cloudinaryService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/single", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<APIResponse<String>> uploadFile(@RequestParam("file") @ValidImageFile MultipartFile file, @RequestParam(required = false) String subFolder) throws Exception {
         String url = cloudinaryService.uploadFile(file, subFolder, null);
         return ResponseEntity.ok(APIResponse.success(200, "File uploaded", url));

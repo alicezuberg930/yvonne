@@ -3,21 +3,14 @@ import { InterceptorManager } from "./interceptor"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080/api/v1'
 
-type FetchOptions = RequestInit
-
 export class HttpClient {
     interceptors = {
-        request: new InterceptorManager<FetchOptions>(),
+        request: new InterceptorManager<RequestInit>(),
         response: new InterceptorManager<Error | HttpError>(),
     }
 
-    private async fetchJson<T>(url: string, options: FetchOptions = {}): Promise<T> {
-        let config: FetchOptions = {
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
+    private async fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> {
+        let config: RequestInit = { ...options }
         for (const { onFulfilled } of this.interceptors.request.getHandlers()) {
             if (onFulfilled) config = await onFulfilled(config)
         }
@@ -38,7 +31,6 @@ export class HttpClient {
                 }
                 throw error
             }
-
             let data = await response.json()
             for (const { onFulfilled } of this.interceptors.response.getHandlers()) {
                 if (onFulfilled) data = await onFulfilled(data)
@@ -53,7 +45,7 @@ export class HttpClient {
         }
     }
 
-    get<T>(endpoint: string, options?: FetchOptions) {
+    get<T>(endpoint: string, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'GET',
             credentials: 'include',
@@ -61,34 +53,34 @@ export class HttpClient {
         })
     }
 
-    post<T>(endpoint: string, body?: any, options?: FetchOptions) {
+    post<T>(endpoint: string, body?: any, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'POST',
             credentials: 'include',
-            body: body ? JSON.stringify(body) : undefined,
+            body: body ? body instanceof FormData ? body : JSON.stringify(body) : undefined,
             ...options,
         })
     }
 
-    put<T>(endpoint: string, body?: any, options?: FetchOptions) {
+    put<T>(endpoint: string, body?: any, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'PUT',
             credentials: 'include',
-            body: body ? JSON.stringify(body) : undefined,
+            body: body ? body instanceof FormData ? body : JSON.stringify(body) : undefined,
             ...options,
         })
     }
 
-    patch<T>(endpoint: string, body?: any, options?: FetchOptions) {
+    patch<T>(endpoint: string, body?: any, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'PATCH',
             credentials: 'include',
-            body: body ? JSON.stringify(body) : undefined,
+            body: body ? body instanceof FormData ? body : JSON.stringify(body) : undefined,
             ...options,
         })
     }
 
-    delete<T>(endpoint: string, options?: FetchOptions) {
+    delete<T>(endpoint: string, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'DELETE',
             credentials: 'include',

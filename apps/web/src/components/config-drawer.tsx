@@ -131,7 +131,8 @@ function RadioGroupItem({
       className={cn('group outline-none', 'transition duration-200 ease-in')}
       aria-describedby={`${item.value}-description`}
       render={(props, state) => {
-        const { checked } = state;
+        const { checked } = state
+
         return (
           <div className='text-center'>
             <div

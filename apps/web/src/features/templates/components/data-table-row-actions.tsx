@@ -1,6 +1,6 @@
 'use client'
 import { type Row } from '@tanstack/react-table'
-import { EllipsisVertical, Trash2, UserPen } from 'lucide-react'
+import { EllipsisVertical, Trash2, UserPen, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,15 +10,15 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type User } from '../data/schema'
-import { useUsers } from './users-provider'
+import { useTemplates } from './templates-provider'
+import { Template } from '@/@types'
 
 type DataTableRowActionsProps = {
-  row: Row<User>
+  row: Row<Template>
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const { setOpen, setCurrentRow } = useUsers()
+  const { setOpen, setCurrentRow } = useTemplates()
   return (
     <>
       <DropdownMenu modal={false}>
@@ -54,6 +54,19 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             Delete
             <DropdownMenuShortcut>
               <Trash2 size={16} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              setCurrentRow(row.original)
+              setOpen('preview')
+            }}
+            className='text-yellow-500!'
+          >
+            Preview
+            <DropdownMenuShortcut>
+              <Eye size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -11,6 +11,7 @@ import java.util.List;
 public interface CampaignContactRepository extends JpaRepository<CampaignContact, CampaignContactId> {
 
     List<CampaignContact> findAllByCampaign(Campaign campaign);
+
     // List<BusinessUser> findByBusiness(Business business);
     // List<BusinessUser> findByUser(User user);
     // Optional<BusinessUser> findByBusinessAndUser(Business business, User user);

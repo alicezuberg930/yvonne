@@ -23,18 +23,17 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
-import { roles } from '../data/data'
-import { type User } from '../data/schema'
+import { Template } from '@/@types'
 import { DataTableBulkActions } from './data-table-bulk-actions'
-import { usersColumns as columns } from './users-columns'
+import { templatesColumns as columns } from './templates-columns'
+import useQueryState from '@/hooks/useQueryState'
 
 type DataTableProps = {
-  data: User[]
-  search: Record<string, string | undefined>
-  navigate: NavigateFn
+  data: Template[]
 }
 
-export function TemplatesTable({ data, search, navigate }: DataTableProps) {
+export function TemplatesTable({ data }: DataTableProps) {
+  const { navigate, search } = useQueryState()
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -115,11 +114,6 @@ export function TemplatesTable({ data, search, navigate }: DataTableProps) {
               { label: 'Invited', value: 'invited' },
               { label: 'Suspended', value: 'suspended' },
             ],
-          },
-          {
-            columnId: 'role',
-            title: 'Role',
-            options: roles.map((role) => ({ ...role })),
           },
         ]}
       />

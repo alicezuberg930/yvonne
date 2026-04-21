@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import server.rem.enums.CampaignSendType;
+import server.rem.enums.CampaignStatus;
 
 @Entity
 @Table(name = "campaigns")
@@ -32,6 +33,7 @@ public class Campaign extends Base {
     private String description;
 
     @Column(name = "send_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private CampaignSendType sendType;
 
     @Column(name = "schedule_at", nullable = true)
@@ -41,4 +43,8 @@ public class Campaign extends Base {
     @JoinTable(name = "campaign_contact", joinColumns = @JoinColumn(name = "campaign_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "id"))
     @JsonIgnoreProperties({ "business", "customerGroup", "tag", "campaigns" })
     private Set<Contact> contacts;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CampaignStatus status;
 }

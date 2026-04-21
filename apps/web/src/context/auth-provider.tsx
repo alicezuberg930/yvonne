@@ -8,9 +8,9 @@ import {
     signIn as signInApi,
     signOut as signOutApi,
     signUp as SignUpApi
-} from '@/lib/api'
+} from '@/lib/repository/api'
 // types
-import type { Profile, User } from "@/@types/user"
+import type { Profile } from "@/@types/user"
 import { AuthValidators } from '@/validators/auth'
 import { toast } from 'sonner'
 import { Role } from '@/@types/role'
@@ -184,7 +184,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const signIn = useCallback(async (data: AuthValidators.SignIn) => {
         try {
             const response = await signInApi(data)
-            toast.success(`Welcome back, ${response.data.user.fullname}!`)
+            toast.success(response.message)
             dispatch({
                 type: Types.LOGIN,
                 payload: { user: response.data.user }

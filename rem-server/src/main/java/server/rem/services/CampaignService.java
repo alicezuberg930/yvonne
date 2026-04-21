@@ -11,11 +11,13 @@ import server.rem.entities.Business;
 import server.rem.entities.Campaign;
 import server.rem.entities.Contact;
 import server.rem.entities.Template;
+import server.rem.enums.CampaignSendType;
 import server.rem.mappers.CampaignMapper;
 import server.rem.repositories.BusinessRepository;
 import server.rem.repositories.CampaignRepository;
 import server.rem.repositories.ContactRepository;
 import server.rem.repositories.TemplateRepository;
+import server.rem.scheduler.CampaignScheduler;
 import server.rem.utils.exceptions.ResourceNotFoundException;
 
 @Service
@@ -27,13 +29,19 @@ public class CampaignService {
     private final TemplateRepository templateRepository;
     private final EmailService emailService;
     private final ContactRepository contactRepository;
+    private final CampaignScheduler campaignScheduler;
 
-
-    public Campaign createCampaign(CreateCampaignDto dto) {
-        Business business = businessRepository.findById(dto.getBusinessId()).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
+    public Campaign createCampaign(CreateCampaignDto dto, String businessId) throws Exception {
+        Business business = businessRepository.findById(businessId).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
         Template template = templateRepository.findById(dto.getTemplateId()).orElseThrow(() -> new ResourceNotFoundException("Template not found"));
         List<Contact> contacts = contactRepository.findAllById(dto.getContactIds());
         Campaign campaign = campaignMapper.toEntity(dto, business, template, contacts);
+        if(dto.getSendType().equals(CampaignSendType.IMMEDIATE)){
+            sendCampaign(campaign.getId(), businessId);
+        } else {
+            // schedule to quartz
+            campaignScheduler.scheduleCampaign(campaign);
+        }
         return campaignRepository.save(campaign);
     }
 

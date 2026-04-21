@@ -1,3 +1,4 @@
+import juice from 'juice'
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -77,4 +78,50 @@ export function getPageNumbers(currentPage: number, totalPages: number) {
 
 export function sleep(ms: number = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+const quillCss = `
+  .ql-align-center { text-align: center; }
+  .ql-align-right { text-align: right; }
+  .ql-align-left { text-align: left; }
+  .ql-align-justify { text-align: justify; }
+
+  .ql-indent-1 { padding-left: 3em; }
+  .ql-indent-2 { padding-left: 6em; }
+  .ql-indent-3 { padding-left: 9em; }
+
+  h1 { font-size: 2em; font-weight: bold; }
+  h2 { font-size: 1.5em; font-weight: bold; }
+  h3 { font-size: 1.17em; font-weight: bold; }
+
+  strong { font-weight: bold; }
+  em { font-style: italic; }
+  u { text-decoration: underline; }
+  s { text-decoration: line-through; }
+
+  ul { list-style-type: disc; padding-left: 1.5em; }
+  ol { list-style-type: decimal; padding-left: 1.5em; }
+  li { margin-bottom: 0.25em; }
+
+  a { color: #0066cc; text-decoration: underline; }
+
+  blockquote {
+    border-left: 4px solid #ccc;
+    margin: 0;
+    padding-left: 1em;
+    color: #666;
+  }
+
+  pre {
+    background-color: #f4f4f4;
+    padding: 1em;
+    font-family: monospace;
+    white-space: pre-wrap;
+  }
+`
+
+export const inlineQuillStyles = (html: string): string => {
+  const wrapped = `<div>${html}</div>`
+  const inlined = juice.inlineContent(wrapped, quillCss)
+  return inlined
 }

@@ -14,9 +14,6 @@ import server.rem.enums.CampaignSendType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCampaignDto {
-    @NotBlank(message = "Business id is required")
-    private String businessId;
-
     @NotBlank(message = "Template id is required")
     private String templateId;
 
