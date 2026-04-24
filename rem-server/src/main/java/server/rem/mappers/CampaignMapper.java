@@ -7,7 +7,11 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import server.rem.dtos.campaign.CampaignResponse;
 import server.rem.dtos.campaign.CreateCampaignDto;
+import server.rem.dtos.campaign.UpdateCampaignDto;
+import server.rem.dtos.contact.ContactResponse;
+import server.rem.dtos.template.TemplateResponse;
 import server.rem.entities.Business;
 import server.rem.entities.Campaign;
 import server.rem.entities.Contact;
@@ -22,6 +26,7 @@ public interface CampaignMapper {
     @Mapping(target = "description", source = "dto.description")
     @Mapping(target = "scheduleAt", source = "dto.scheduleAt")
     @Mapping(target = "contacts", source = "contacts")
+    @Mapping(target = "status", ignore = true)
     Campaign toEntity(CreateCampaignDto dto, Business business, Template template, List<Contact> contacts);
 
     @Mapping(target = "business", source = "business")
@@ -33,6 +38,13 @@ public interface CampaignMapper {
     @Mapping(target = "contacts", source = "contacts")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updateEntity(CreateCampaignDto dto, Business business, Template template, List<Contact> contacts, @MappingTarget Campaign campaign);
+    void updateEntity(UpdateCampaignDto dto, Business business, Template template, List<Contact> contacts, @MappingTarget Campaign campaign);
+
+    TemplateResponse toTemplateResponse(Template template);
+
+    ContactResponse toContactResponse(Contact contact);
+
+    CampaignResponse toCampaignResponse(Campaign campaign);
 }

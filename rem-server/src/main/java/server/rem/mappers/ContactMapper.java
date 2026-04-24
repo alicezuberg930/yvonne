@@ -2,6 +2,7 @@ package server.rem.mappers;
 
 import org.mapstruct.*;
 
+import server.rem.dtos.contact.ContactResponse;
 import server.rem.dtos.contact.CreateContactDto;
 import server.rem.entities.Business;
 import server.rem.entities.Contact;
@@ -77,4 +78,6 @@ public interface ContactMapper {
             CustomerGroup customerGroup,
             @MappingTarget Contact contact
     );
+
+    ContactResponse toContactResponse(Contact contact);
 }

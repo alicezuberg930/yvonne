@@ -5,13 +5,19 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import server.rem.dtos.APIResponse;
+import server.rem.dtos.CustomPageResponse;
+import server.rem.dtos.contact.ContactResponse;
 import server.rem.dtos.contact.CreateContactDto;
 import server.rem.dtos.contact.QueryContactDto;
 import server.rem.entities.Contact;
 import server.rem.services.ContactService;
+import server.rem.views.Views;
  
 @RestController
 @RequestMapping("/contacts")
@@ -19,27 +25,39 @@ import server.rem.services.ContactService;
 public class ContactController {
     private final ContactService contactService;
  
+    // @JsonView(Views.Public.class)
     @GetMapping
-    public ResponseEntity<APIResponse<Page<Contact>>> getContactList(@ModelAttribute QueryContactDto dto) {
-        return ResponseEntity.ok(APIResponse.success(200, "Contact list fetched successfully", contactService.getContactList(dto)));
+    // @PreAuthorize("hasAuthority('contact.read')")
+    public ResponseEntity<APIResponse<CustomPageResponse<ContactResponse>>> getContactList(@ModelAttribute QueryContactDto dto) {
+        return ResponseEntity.ok(
+            APIResponse.success(
+                200, 
+                "Contact list fetched successfully", 
+                contactService.getContactList(dto)
+            )
+        );
     }
  
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('contact.read')")
     public ResponseEntity<APIResponse<Contact>> getById(@PathVariable String id) {
         return ResponseEntity.ok(APIResponse.success(200, "Contact fetched", contactService.getById(id)));
     }
  
     @PostMapping
+    @PreAuthorize("hasAuthority('contact.create')")
     public ResponseEntity<APIResponse<Contact>> create(@Valid @RequestBody CreateContactDto dto) {
         return ResponseEntity.ok(APIResponse.success(201, "Contact created", contactService.create(dto)));
     }
  
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('contact.edit')")
     public ResponseEntity<APIResponse<Contact>> update(@PathVariable String id, @Valid @RequestBody CreateContactDto dto) {
         return ResponseEntity.ok(APIResponse.success(200, "Contact updated", contactService.update(id, dto)));
     }
  
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('contact.delete')")
     public ResponseEntity<APIResponse<Void>> delete(@PathVariable String id) {
         contactService.delete(id);
         return ResponseEntity.ok(APIResponse.success(200, "Contact deleted", null));

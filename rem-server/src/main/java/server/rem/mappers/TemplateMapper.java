@@ -6,6 +6,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import server.rem.dtos.template.CreateTemplateDto;
+import server.rem.dtos.template.UpdateTemplateDto;
 import server.rem.entities.Business;
 import server.rem.entities.Template;
 
@@ -26,9 +27,9 @@ public interface TemplateMapper {
     @Mapping(target = "footer", source = "dto.footer")
     @Mapping(target = "contactPhone", source = "dto.contactPhone")
     @Mapping(target = "websiteUrl", source = "dto.websiteUrl")
-    @Mapping(target = "business", source = "business")
+    @Mapping(target = "business", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updateEntity(CreateTemplateDto dto, Business business, @MappingTarget Template template);
-
+    void updateEntity(UpdateTemplateDto dto, @MappingTarget Template template);
 }

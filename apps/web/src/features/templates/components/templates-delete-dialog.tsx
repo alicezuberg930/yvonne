@@ -1,12 +1,14 @@
 'use client'
 import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Template } from '@/@types'
+import { toast } from 'sonner'
+import { deleteTemplate } from '@/lib/repository/api'
+import { HttpError } from '@/lib/repository/httpError'
 
 type TemplateDeleteDialogProps = {
   open: boolean
@@ -19,13 +21,26 @@ export function TemplatesDeleteDialog({
   onOpenChange,
   currentRow,
 }: TemplateDeleteDialogProps) {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<string>('')
 
   const handleDelete = () => {
     if (value.trim() !== currentRow.name) return
-
-    onOpenChange(false)
-    showSubmittedData(currentRow, 'The following template has been deleted:')
+    const submit = async () => {
+      try {
+        return await deleteTemplate(currentRow.id)
+      } catch (error) {
+        throw error
+      } finally {
+        onOpenChange(false)
+      }
+    }
+    toast.promise(submit,
+      {
+        loading: "Deleting template",
+        error: (err) => err instanceof HttpError ? err.message : "Internal server error",
+        success: (data) => data?.message
+      }
+    )
   }
 
   return (
@@ -49,7 +64,7 @@ export function TemplatesDeleteDialog({
             Are you sure you want to delete{' '}
             <span className='font-bold'>{currentRow.name}</span>?
             <br />
-            This action will permanently remove the user from the system. This cannot be undone.
+            This action will permanently remove the template from the system. This cannot be undone.
           </p>
 
           <Label className='my-2'>

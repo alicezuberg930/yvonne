@@ -685,17 +685,13 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                 onOpenChange={setIsPopoverOpen}
                 modal={modalPopover}>
                 <div id={triggerDescriptionId} className="sr-only">
-                    Multi-select dropdown. Use arrow keys to navigate, Enter to select,
-                    and Escape to close.
+                    Multi-select dropdown. Use arrow keys to navigate, Enter to select, and Escape to close.
                 </div>
                 <div id={selectedCountId} className="sr-only" aria-live="polite">
                     {selectedValues.length === 0 ? (
                         "No options selected"
                     ) : (
-                        `${selectedValues.length} option${selectedValues.length === 1 ? "" : "s"} selected: ${selectedValues
-                            .map((value) => getOptionByValue(value)?.label)
-                            .filter(Boolean)
-                            .join(", ")}`
+                        `${selectedValues.length} option${selectedValues.length === 1 ? "" : "s"} selected: ${selectedValues.map((value) => getOptionByValue(value)?.label).filter(Boolean).join(", ")}`
                     )}
                 </div>
 
@@ -712,7 +708,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                         aria-describedby={`${triggerDescriptionId} ${selectedCountId}`}
                         aria-label={`Multi-select: ${selectedValues.length} of ${getAllOptions().length} options selected. ${placeholder}`}
                         className={cn(
-                            "flex p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto",
+                            "border-input flex p-1 rounded-md border min-h-9 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto",
                             autoSize ? "w-auto" : "w-full",
                             responsiveSettings.compactMode && "min-h-8 text-sm",
                             screenSize === "mobile" && "min-h-12 text-base",
@@ -903,7 +899,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                         touchAction: "manipulation",
                     }}
                     align="start"
-                    // onEscapeKeyDown={() => setIsPopoverOpen(false)}
+                // onEscapeKeyDown={() => setIsPopoverOpen(false)}
                 >
                     <Command>
                         {searchable && (
@@ -940,28 +936,17 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                                             selectedValues.length ===
                                             getAllOptions().filter((opt) => !opt.disabled).length
                                         }
-                                        aria-label={`Select all ${getAllOptions().length
-                                            } options`}
+                                        aria-label={`Select all ${getAllOptions().length} options`}
                                         className="cursor-pointer">
                                         <div
-                                            className={cn(
-                                                "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                selectedValues.length ===
-                                                    getAllOptions().filter((opt) => !opt.disabled)
-                                                        .length
-                                                    ? "bg-primary text-primary-foreground"
-                                                    : "opacity-50 [&_svg]:invisible"
+                                            className={cn("mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                selectedValues.length === getAllOptions().filter((opt) => !opt.disabled).length ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
                                             )}
-                                            aria-hidden="true">
+                                            aria-hidden="true"
+                                        >
                                             <CheckIcon className="h-4 w-4" />
                                         </div>
-                                        <span>
-                                            (Select All
-                                            {getAllOptions().length > 20
-                                                ? ` - ${getAllOptions().length} options`
-                                                : ""}
-                                            )
-                                        </span>
+                                        <span>(Select All {getAllOptions().length > 20 ? ` - ${getAllOptions().length} options` : ""})</span>
                                     </CommandItem>
                                 </CommandGroup>
                             )}
@@ -969,9 +954,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                                 filteredOptions.map((group) => (
                                     <CommandGroup key={group.heading} heading={group.heading}>
                                         {group.options.map((option) => {
-                                            const isSelected = selectedValues.includes(
-                                                option.value
-                                            )
+                                            const isSelected = selectedValues.includes(option.value)
                                             return (
                                                 <CommandItem
                                                     key={option.value}
@@ -979,21 +962,20 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(({
                                                     role="option"
                                                     aria-selected={isSelected}
                                                     aria-disabled={option.disabled}
-                                                    aria-label={`${option.label}${isSelected ? ", selected" : ", not selected"
-                                                        }${option.disabled ? ", disabled" : ""}`}
+                                                    aria-label={`${option.label}${isSelected ? ", selected" : ", not selected"}${option.disabled ? ", disabled" : ""}`}
                                                     className={cn(
                                                         "cursor-pointer",
                                                         option.disabled && "opacity-50 cursor-not-allowed"
                                                     )}
-                                                    disabled={option.disabled}>
+                                                    disabled={option.disabled}
+                                                >
                                                     <div
                                                         className={cn(
                                                             "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                            isSelected
-                                                                ? "bg-primary text-primary-foreground"
-                                                                : "opacity-50 [&_svg]:invisible"
+                                                            isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
                                                         )}
-                                                        aria-hidden="true">
+                                                        aria-hidden="true"
+                                                    >
                                                         <CheckIcon className="h-4 w-4" />
                                                     </div>
                                                     {option.icon && (

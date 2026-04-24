@@ -3,19 +3,25 @@ package server.rem.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import server.rem.common.messages.TemplateMessages;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.template.CreateTemplateDto;
+import server.rem.dtos.template.UpdateTemplateDto;
 import server.rem.entities.Template;
 import server.rem.services.TemplateService;
-
 
 @RestController
 @RequestMapping("/templates")
@@ -24,19 +30,51 @@ public class TemplateController {
     private final TemplateService templateService;
 
     @PostMapping
-    public ResponseEntity<APIResponse<Template>> createTemplate(@Valid @RequestBody CreateTemplateDto dto) {
+    @PreAuthorize("hasAuthority('template.create')")
+    public ResponseEntity<APIResponse<Template>> createTemplate(
+        @Valid @RequestBody CreateTemplateDto dto,         
+        @RequestAttribute("businessId") String businessId
+    ) {
         return ResponseEntity.ok().body(APIResponse.success(
             201,
-            "Template created successfully",
-            templateService.createTemplate(dto))
+            TemplateMessages.CREATED,
+            templateService.createTemplate(dto, businessId))
+        );
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('template.edit')")
+    public ResponseEntity<APIResponse<Template>> updateTemplate(
+        @Valid @RequestBody UpdateTemplateDto dto,
+        @PathVariable String id,  
+        @RequestAttribute("businessId") String businessId
+    ) {
+        return ResponseEntity.ok().body(APIResponse.success(
+            200,
+            TemplateMessages.UPDATED,
+            templateService.updateTemplate(dto, id, businessId))
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('template.delete')")
+    public ResponseEntity<APIResponse<Template>> deleteTemplate(
+        @PathVariable String id,  
+        @RequestAttribute("businessId") String businessId
+    ) {
+        return ResponseEntity.ok().body(APIResponse.success(
+            200,
+            TemplateMessages.DELETED,
+            templateService.deleteTemplate(id, businessId))
         );
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('template.view')")
     public ResponseEntity<APIResponse<List<Template>>> getTemplates() {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
-            "Templates retrieved successfully",
+            TemplateMessages.LIST_RETRIEVED,
             templateService.getTemplates())
         );
     }

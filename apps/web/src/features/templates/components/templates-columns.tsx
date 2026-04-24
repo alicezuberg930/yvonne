@@ -38,7 +38,7 @@ export const templatesColumns: ColumnDef<Template>[] = [
       <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36 ps-3'>{row.getValue('name')}</LongText>
+      <LongText className='max-w-36'>{row.getValue('name')}</LongText>
     ),
     meta: {
       className: cn(

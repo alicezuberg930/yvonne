@@ -6,7 +6,7 @@ import { HttpError } from './lib/repository/httpError'
  
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
-    const token = request.cookies.get('ACCESS_TOKEN')?.value
+    const token = request.cookies.get('X-Access-Token')?.value
     const businessId = request.cookies.get('X-Business-Id')?.value
     const signInUrl = new URL('/sign-in', request.url)
     const businessesUrl = new URL('/businesses', request.url)

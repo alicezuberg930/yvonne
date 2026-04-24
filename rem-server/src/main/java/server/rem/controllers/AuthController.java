@@ -37,7 +37,7 @@ public class AuthController {
     public ResponseEntity<APIResponse<SignInUserResponse>> signIn(@Valid @RequestBody SignInUserRequest dto, HttpServletResponse response) {
         SignInUserResponse signInResponse = authService.signIn(dto);
         ResponseCookie cookie = ResponseCookie
-                .from("ACCESS_TOKEN", signInResponse.getAccessToken())
+                .from("X-Access-Token", signInResponse.getAccessToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

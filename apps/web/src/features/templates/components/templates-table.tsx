@@ -102,20 +102,8 @@ export function TemplatesTable({ data }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter users...'
-        searchKey='username'
-        filters={[
-          {
-            columnId: 'status',
-            title: 'Status',
-            options: [
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
-              { label: 'Invited', value: 'invited' },
-              { label: 'Suspended', value: 'suspended' },
-            ],
-          },
-        ]}
+        searchPlaceholder='Filter templates...'
+        searchKey='name'
       />
       <div className='overflow-hidden rounded-md border'>
         <Table>

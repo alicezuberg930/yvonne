@@ -2,12 +2,17 @@ package server.rem.services;
 
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import server.rem.dtos.CustomPageResponse;
+import server.rem.dtos.contact.ContactResponse;
 import server.rem.dtos.contact.CreateContactDto;
 import server.rem.dtos.contact.QueryContactDto;
 import server.rem.entities.Business;
@@ -31,17 +36,19 @@ public class ContactService {
     private final CustomerGroupRepository customerGroupRepository;
     private final ContactMapper contactMapper;
 
-    public Page<Contact> getContactList(QueryContactDto dto) {
+    public CustomPageResponse<ContactResponse> getContactList(QueryContactDto dto) {
         Pageable pageable = PageRequest.of(
             dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
             dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10
         );
         Specification<Contact> spec = ContactSpecification.withFilters(dto);
-        return contactRepository.findAll(spec, pageable);
+        Page<ContactResponse> result = contactRepository.findAll(spec, pageable).map(contactMapper::toContactResponse);
+        return new CustomPageResponse<ContactResponse>(result);
     }
 
     public Contact getById(String id) {
-        return contactRepository.findById(id)
+        return contactRepository
+                .findById(id)
                 .orElseThrow(() -> new RuntimeException("Contact not found"));
     }
 

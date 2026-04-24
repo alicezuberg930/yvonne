@@ -70,6 +70,15 @@ import { RadioGroup } from "@base-ui/react";
 import { Radio } from "@base-ui/react";
 import { cn } from "@/lib/utils"; // Standard Shadcn utility
 import { CircleCheck, CpuIcon } from "lucide-react";
+import { Editor } from '@tinymce/tinymce-react';
+import { Calendar } from "@/components/ui/calendar";
+import { DatePicker } from "@/components/date-picker";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, RHFRangeDatePicker, RHFSingleDatePicker } from "@/components/hook-form";
+import { FieldGroup } from "@/components/ui/field";
+import { DayPicker, DateRange, type DayPickerProps } from 'react-day-picker'
 
 const options = [
     {
@@ -90,6 +99,34 @@ const options = [
 ];
 
 export default function CpuSelector() {
+    const signUpSchema = z.object({
+        dateRange: z.object({
+            from: z.date().optional(),
+            to: z.date().optional()
+        }).refine(
+            (val) => val.from !== undefined && val.to !== undefined,
+            { message: "Select a start and end date" }
+        )
+    })
+
+    const form = useForm<z.infer<typeof signUpSchema>>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: {
+            dateRange: {
+                from: undefined,
+                to: undefined,
+            },
+        },
+    })
+
+    const { handleSubmit } = form
+
+    function onSubmit(data: z.infer<typeof signUpSchema>) {
+        // eslint-disable-next-line no-console
+        console.log(data)
+
+    }
+
     return (
         // <RadioGroup defaultValue="4-core" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         //     {options.map((option) => (
@@ -155,7 +192,45 @@ export default function CpuSelector() {
         //         </label>
         //     ))}
         // </RadioGroup>
-        <div className="p-12">
-        </div>
+        // <Editor
+        //     apiKey='syztc4nmwzj649hdcz869ptfjxpn6l03x2db88c0pn77zv3i'
+        //     init={{
+        //         plugins: [
+        //             // Core editing features
+        //             'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+        //             // Your account includes a free trial of TinyMCE premium features
+        //             // Try the most popular premium features until May 5, 2026:
+        //             'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'tinymceai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown', 'importword', 'exportword', 'exportpdf'
+        //         ],
+        //         toolbar: 'undo redo | tinymceai-chat tinymceai-quickactions tinymceai-review | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        //         tinycomments_mode: 'embedded',
+        //         tinycomments_author: 'Author name',
+        //         mergetags_list: [
+        //             { value: 'First.Name', title: 'First Name' },
+        //             { value: 'Email', title: 'Email' },
+        //         ],
+        //         tinymceai_token_provider: async () => {
+        //             await fetch(`https://demo.api.tiny.cloud/1/syztc4nmwzj649hdcz869ptfjxpn6l03x2db88c0pn77zv3i/auth/random`, { method: "POST", credentials: "include" });
+        //             return { token: await fetch(`https://demo.api.tiny.cloud/1/syztc4nmwzj649hdcz869ptfjxpn6l03x2db88c0pn77zv3i/jwt/tinymceai`, { credentials: "include" }).then(r => r.text()) };
+        //         },
+        //         uploadcare_public_key: 'bb4aa260efed9c599ec1',
+        //     }}
+        //     initialValue="Welcome to TinyMCE!"
+        // />
+        <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)}>
+            <FieldGroup>
+                {/* <RHFSingleDatePicker
+                    name="date"
+                    fieldLabel="Full name"
+                    placeholder="Hatsune Miku"
+                /> */}
+                <RHFRangeDatePicker
+                    name="dateRange"
+                    fieldLabel="Full name"
+                    placeholder="Hatsune Miku"
+                />
+            </FieldGroup>
+            <button type="submit">eqrfeqr </button>
+        </FormProvider>
     );
 }

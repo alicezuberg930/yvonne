@@ -1,74 +1,102 @@
 import { useFormContext, Controller } from 'react-hook-form'
 import { Field, FieldError, FieldLabel } from '../ui/field'
-import { DayPicker, type DateRange, type DayPickerProps } from 'react-day-picker'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { useState } from 'react'
+import { type DateRange, type DayPickerProps } from 'react-day-picker'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { CalendarIcon } from 'lucide-react'
-import 'react-day-picker/style.css'
-
-dayjs.extend(customParseFormat)
+import { format } from 'date-fns'
+import { Calendar } from '../ui/calendar'
+import { Input } from '../ui/input'
 
 type RHFDatePickerProps = Omit<DayPickerProps, 'mode'> & {
-    name: string
+    placeholder?: string
+    withTime?: boolean
+    name: string,
     fieldLabel: string
-    placeholder: string
 }
 
 export function RHFSingleDatePicker({
+    placeholder,
     name,
     fieldLabel,
-    placeholder,
+    withTime = false,
     ...other
 }: RHFDatePickerProps) {
     const { control } = useFormContext()
-    const [open, setOpen] = useState(false)
 
     return (
         <Controller
             name={name}
             control={control}
-            render={({ field, fieldState: { error, invalid } }) => (
-                <Field data-invalid={invalid}>
-                    <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
-                    <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger >
-                            <Button
-                                variant='outline'
-                                className={`justify-start text-left font-normal w-full ${invalid ? 'border-red-500' : ''}`}
-                                onClick={() => setOpen(true)}
-                            >
-                                <CalendarIcon className='mr-2 h-4 w-4 opacity-50' />
-                                {field.value ? (
-                                    field.value
-                                ) : (
-                                    <span className='text-muted-foreground'>{placeholder}</span>
-                                )}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className='min-w-fit' align='start'>
-                            <DayPicker
-                                {...other}
-                                captionLayout='dropdown'
-                                startMonth={new Date(1900, 0)}
-                                endMonth={new Date(new Date().getFullYear(), 0)}
-                                mode='single'
-                                selected={field.value ? dayjs(field.value, 'YYYY-MM-DD').toDate() : undefined}
-                                onSelect={(day) => {
-                                    if (day) {
-                                        field.onChange(dayjs(day).format('YYYY-MM-DD'))
-                                        setOpen(false)
-                                    }
-                                }}
-                                defaultMonth={field.value}
+            render={({ field, fieldState: { error, invalid } }) => {
+                const handleDateChange = (selectedDate: Date | undefined) => {
+                    if (!selectedDate) return
+                    const updated = new Date(selectedDate)
+                    // preserve existing time if already set
+                    if (field.value) {
+                        updated.setHours(field.value.getHours())
+                        updated.setMinutes(field.value.getMinutes())
+                    }
+                    field.onChange(updated)
+                }
+
+                const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const [hours, minutes] = e.target.value.split(':').map(Number)
+                    const updated = new Date(field.value ?? new Date())
+                    updated.setHours(hours)
+                    updated.setMinutes(minutes)
+                    field.onChange(updated)
+                }
+
+                return (
+                    <Field data-invalid={invalid}>
+                        <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
+                        <Popover>
+                            <PopoverTrigger
+                                render={
+                                    <Button
+                                        variant={invalid ? 'destructive' : 'outline'}
+                                        data-empty={!field.value}
+                                        className='justify-start text-start font-normal data-[empty=true]:text-muted-foreground'
+                                    >
+                                        {field.value ? (
+                                            withTime ? (
+                                                format(field.value, 'dd/MM/yyyy HH:mm')
+                                            ) : (
+                                                format(field.value, 'dd/MM/yyyy')
+                                            )
+                                        ) : (
+                                            <span>{placeholder}</span>
+                                        )}
+                                        <CalendarIcon className='ms-auto h-4 w-4 opacity-50' />
+                                    </Button>
+                                }
                             />
-                        </PopoverContent>
-                    </Popover>
-                    {invalid && <FieldError errors={[error]} />}
-                </Field>
-            )}
+                            <PopoverContent className='w-auto p-0'>
+                                <Calendar
+                                    {...other}
+                                    mode='single'
+                                    captionLayout='dropdown'
+                                    selected={field.value}
+                                    onSelect={handleDateChange}
+                                    disabled={(date: Date) => date < new Date('1900-01-01')}
+                                />
+                                {withTime && (
+                                    <div className='border-t p-3 flex items-center gap-2'>
+                                        <Input
+                                            type='time'
+                                            className='w-full'
+                                            value={field.value ? format(field.value, 'HH:mm') : ''}
+                                            onChange={handleTimeChange}
+                                        />
+                                    </div>
+                                )}
+                            </PopoverContent>
+                        </Popover>
+                        {invalid && <FieldError errors={[error]} />}
+                    </Field>
+                )
+            }}
         />
     )
 }
@@ -80,57 +108,49 @@ export function RHFRangeDatePicker({
     ...other
 }: RHFDatePickerProps) {
     const { control } = useFormContext()
-    const [open, setOpen] = useState(false)
-
-    const displayValueStr = (start?: string, end?: string) => {
-        if (start && !end) return `${dayjs(start).format('YYYY-MM-DD')} - ...`
-        return start && end ? `${dayjs(start).format('YYYY-MM-DD')} - ${dayjs(end).format('YYYY-MM-DD')} ` : ''
-    }
 
     return (
         <Controller
             name={name}
             control={control}
             render={({ field, fieldState: { error, invalid } }) => {
-                const [start, end] = field.value || [undefined, undefined]
-                const displayValue = displayValueStr(start, end)
-                const selected: DateRange = {
-                    from: start ? dayjs(start, 'YYYY-MM-DD').toDate() : undefined,
-                    to: end ? dayjs(end, 'YYYY-MM-DD').toDate() : undefined
+                const range: DateRange | undefined = field.value
+
+                const handleRangeChange = (selectedRange: DateRange | undefined) => {
+                    field.onChange(selectedRange)
                 }
+
+                const formatDisplay = () => {
+                    if (!range?.from) return <span>{placeholder ?? 'Pick a date range'}</span>
+                    if (!range.to) return format(range.from, 'dd/MM/yyyy')
+                    return `${format(range.from, 'dd/MM/yyyy')} - ${format(range.to, 'dd/MM/yyyy')}`
+                }
+
                 return (
                     <Field data-invalid={invalid}>
                         <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
-                        <Popover open={open} onOpenChange={setOpen}>
-                            <PopoverTrigger>
-                                <Button
-                                    variant='outline'
-                                    className={`justify - start text - left font - normal w - full ${invalid ? 'border-red-500' : ''} `}
-                                    onClick={() => setOpen(true)}
-                                >
-                                    <CalendarIcon className='mr-2 h-4 w-4 opacity-50' />
-                                    {displayValue.length ? (
-                                        displayValue
-                                    ) : (
-                                        <span className='text-muted-foreground'>{placeholder}</span>
-                                    )}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className='min-w-fit' align='start'>
-                                <DayPicker
+                        <Popover>
+                            <PopoverTrigger
+                                render={
+                                    <Button
+                                        variant={invalid ? 'destructive' : 'outline'}
+                                        data-empty={!range?.from}
+                                        className='justify-start text-start font-normal data-[empty=true]:text-muted-foreground'
+                                    >
+                                        {formatDisplay()}
+                                        <CalendarIcon className='ms-auto h-4 w-4 opacity-50' />
+                                    </Button>
+                                }
+                            />
+                            <PopoverContent className='w-auto p-0'>
+                                <Calendar
                                     {...other}
                                     mode='range'
-                                    selected={selected}
-                                    onSelect={(range) => {
-                                        if (range?.from && range.to) {
-                                            const arr = [dayjs(range.from).format('YYYY-MM-DD'), dayjs(range.to).format('YYYY-MM-DD')]
-                                            field.onChange(arr)
-                                        }
-                                    }}
-                                    defaultMonth={selected?.from}
+                                    captionLayout='dropdown'
+                                    selected={range}
+                                    onSelect={handleRangeChange}
                                     numberOfMonths={2}
                                 />
-                                <Button variant={'outline'} onClick={() => setOpen(false)}>OK</Button>
                             </PopoverContent>
                         </Popover>
                         {invalid && <FieldError errors={[error]} />}

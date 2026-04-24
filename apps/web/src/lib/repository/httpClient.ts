@@ -1,5 +1,6 @@
-import { HttpError } from "./httpError"
-import { InterceptorManager } from "./interceptor"
+import { HttpError } from './httpError'
+import { InterceptorManager } from './interceptor'
+import { ApiResponse } from '@/@types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080/api/v1'
 
@@ -10,7 +11,15 @@ export class HttpClient {
     }
 
     private async fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> {
-        let config: RequestInit = { ...options }
+        let config: RequestInit = {
+            ...options,
+            headers: {
+                ...(options.body instanceof FormData ?
+                    {} :
+                    { 'Content-Type': 'application/json' }
+                )
+            }
+        }
         for (const { onFulfilled } of this.interceptors.request.getHandlers()) {
             if (onFulfilled) config = await onFulfilled(config)
         }
@@ -18,13 +27,13 @@ export class HttpClient {
             const response = await fetch(url, config)
             if (!response.ok) {
                 const text = await response.text()
-                let data: unknown
+                let data: ApiResponse<null> | string
                 try {
                     data = text ? JSON.parse(text) : null
                 } catch {
                     data = text
                 }
-                const error = new HttpError(response.status, 'Request Failed', data)
+                const error = new HttpError(response.status, data instanceof Object ? data.message : data, data)
                 // if error is due to authentication, handle it here (e.g., redirect to login)
                 for (const { onRejected } of this.interceptors.response.getHandlers()) {
                     if (onRejected) onRejected(error)
@@ -37,10 +46,10 @@ export class HttpClient {
             }
             return data as T
         } catch (error: unknown) {
-            // Handle Network Errors or re-thrown Interceptor errors
             for (const { onRejected } of this.interceptors.response.getHandlers()) {
                 if (onRejected) onRejected(error)
             }
+            if (!(error instanceof HttpError)) throw new HttpError(500, 'Internal Server Error')
             throw error
         }
     }
@@ -53,7 +62,7 @@ export class HttpClient {
         })
     }
 
-    post<T>(endpoint: string, body?: any, options?: RequestInit) {
+    post<T>(endpoint: string, body?: unknown, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'POST',
             credentials: 'include',
@@ -62,7 +71,7 @@ export class HttpClient {
         })
     }
 
-    put<T>(endpoint: string, body?: any, options?: RequestInit) {
+    put<T>(endpoint: string, body?: unknown, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'PUT',
             credentials: 'include',
@@ -71,7 +80,7 @@ export class HttpClient {
         })
     }
 
-    patch<T>(endpoint: string, body?: any, options?: RequestInit) {
+    patch<T>(endpoint: string, body?: unknown, options?: RequestInit) {
         return this.fetchJson<T>(`${BASE_URL}${endpoint}`, {
             method: 'PATCH',
             credentials: 'include',

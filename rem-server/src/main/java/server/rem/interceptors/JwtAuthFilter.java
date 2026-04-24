@@ -44,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             return Arrays.stream(cookies)
-                    .filter(c -> c.getName().equals("ACCESS_TOKEN"))
+                    .filter(c -> c.getName().equals("X-Access-Token"))
                     .map(Cookie::getValue)
                     .findFirst()
                     .orElse(null);

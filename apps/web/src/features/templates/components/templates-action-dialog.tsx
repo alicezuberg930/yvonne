@@ -1,8 +1,6 @@
 'use client'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,11 +14,12 @@ import { Template } from '@/@types'
 import { FormProvider, RHFRichTextEditor, RHFTextField } from '@/components/hook-form'
 import { FieldGroup } from '@/components/ui/field'
 import { TemplateValidators } from '@/validators/template'
-import { useCallback } from 'react'
-import { RHFUpload } from '@/components/hook-form/RHFUpload'
-import { uploadFile } from '@/lib/repository/api'
+import { createTemplate, updateTemplate } from '@/lib/repository/api'
+import { toast } from 'sonner'
+import { HttpError } from '@/lib/repository/httpError'
+import { inlineQuillStyles } from '@/lib/utils'
 
-type UserActionDialogProps = {
+type TemplateActionDialogProps = {
   currentRow?: Template
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -30,7 +29,7 @@ export function TemplatesActionDialog({
   currentRow,
   open,
   onOpenChange,
-}: UserActionDialogProps) {
+}: TemplateActionDialogProps) {
   const isEdit = !!currentRow
   const form = useForm<TemplateValidators.TemplateForm>({
     resolver: zodResolver(TemplateValidators.formSchema),
@@ -40,6 +39,7 @@ export function TemplatesActionDialog({
         isEdit,
       }
       : {
+        name: '',
         header: '',
         body: '',
         footer: '',
@@ -49,40 +49,65 @@ export function TemplatesActionDialog({
       },
   })
 
+  const { handleSubmit, reset } = form
+
   const onSubmit = async (values: TemplateValidators.TemplateForm) => {
-    form.reset()
-    console.log(values)
-    // showSubmittedData(values)
-    // onOpenChange(false)
+    const submit = async () => {
+      values = {
+        ...values,
+        header: inlineQuillStyles(values.header),
+        body: inlineQuillStyles(values.body),
+        footer: inlineQuillStyles(values.footer),
+      }
+      let response
+      try {
+        if (values.isEdit) {
+          response = await updateTemplate(values, currentRow?.id!)
+        } else {
+          response = await createTemplate(values)
+        }
+        return response
+      } catch (error) {
+        throw error
+      } finally {
+        form.reset()
+        onOpenChange(false)
+      }
+    }
+    toast.promise(submit,
+      {
+        loading: "Submitting data",
+        error: (err) => err instanceof HttpError ? err.message : "Internal server error",
+        success: (data) => data?.message
+      }
+    )
   }
 
-  const { handleSubmit, reset, setError, setValue } = form
-
-  const handleDropThumbnail = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]
-    if (!file) return
-    const img = new window.Image()
-    img.src = URL.createObjectURL(file)
-    const newFile = Object.assign(file, {
-      preview: URL.createObjectURL(file),
-    })
-    // setValue('thumbnail', newFile, { shouldValidate: true })
-    // img.onload = () => {
-    //   URL.revokeObjectURL(img.src)
-    //   if (img.naturalWidth / img.naturalHeight !== 1) {
-    //     setError('thumbnail', { type: 'manual', message: ('thumbnail_must_be_square') })
-    //   } else {
-    //     const newFile = Object.assign(file, {
-    //       preview: URL.createObjectURL(file),
-    //     })
-    //     setValue('thumbnail', newFile, { shouldValidate: true })
-    //   }
-    // }
-    // img.onerror = () => {
-    //   URL.revokeObjectURL(img.src)
-    //   setError('thumbnail', { type: 'manual', message: ('thumbnail_must_be_square') })
-    // }
-  }, [setValue, setError])
+  // const handleDropThumbnail = useCallback((acceptedFiles: File[]) => {
+  //   const file = acceptedFiles[0]
+  //   if (!file) return
+  //   const img = new window.Image()
+  //   img.src = URL.createObjectURL(file)
+  //   const newFile = Object.assign(file, {
+  //     preview: URL.createObjectURL(file),
+  //   })
+  // setValue('thumbnail', newFile, { shouldValidate: true })
+  // img.onload = () => {
+  //   URL.revokeObjectURL(img.src)
+  //   if (img.naturalWidth / img.naturalHeight !== 1) {
+  //     setError('thumbnail', { type: 'manual', message: ('thumbnail_must_be_square') })
+  //   } else {
+  //     const newFile = Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //     })
+  //     setValue('thumbnail', newFile, { shouldValidate: true })
+  //   }
+  // }
+  // img.onerror = () => {
+  //   URL.revokeObjectURL(img.src)
+  //   setError('thumbnail', { type: 'manual', message: ('thumbnail_must_be_square') })
+  // }
+  // }, [setValue, setError])
 
   return (
     <Dialog
@@ -94,15 +119,15 @@ export function TemplatesActionDialog({
     >
       <DialogContent className='sm:max-w-xl'>
         <DialogHeader className='text-start'>
-          <DialogTitle>{isEdit ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>{isEdit ? 'Edit Template' : 'Add New Template'}</DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Update the user here. ' : 'Create new user here. '}
+            {isEdit ? 'Update the Template here. ' : 'Create new Template here. '}
             Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className='h-105 w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3'>
           <FormProvider id='templates-form' methods={form} onSubmit={handleSubmit(onSubmit)}>
-            <div className='grid gap-3'>
+            <div className='space-y-4 px-0.5'>
               <FieldGroup>
                 {/* <RHFUpload
                   multiple={false}
@@ -112,6 +137,10 @@ export function TemplatesActionDialog({
                   onDelete={() => setValue('thumbnail', null, { shouldValidate: true })}
                   fieldLabel={('song_audio_file')}
                 /> */}
+                <RHFTextField
+                  name='name'
+                  fieldLabel='Name'
+                />
                 <RHFRichTextEditor
                   name='header'
                   fieldLabel='Header'

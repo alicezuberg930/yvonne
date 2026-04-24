@@ -1,13 +1,75 @@
-import { useFormContext, Controller } from 'react-hook-form';
-import { Field, FieldError, FieldLabel } from '../ui/field';
-import { NativeSelect } from '../ui/native-select';
-import { MultiSelect, type MultiSelectProps } from '../ui/multi-select';
+import { useFormContext, Controller } from 'react-hook-form'
+import { Field, FieldError, FieldLabel } from '../ui/field'
+import { NativeSelect } from '../ui/native-select'
+import { MultiSelect, type MultiSelectProps } from '../ui/multi-select'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
-type RHFSelectProps = React.ComponentProps<"select"> & {
-    name: string;
-    fieldLabel: string,
-    children: React.ReactNode;
-};
+type RFHStyledSelectProps = {
+    name: string
+    fieldLabel: string
+    groups: {
+        label?: string
+        items: { label: string, value: string }[]
+    }[]
+}
+
+export function RFHStyledSelect({
+    name,
+    fieldLabel,
+    groups
+}: RFHStyledSelectProps) {
+    const { control } = useFormContext()
+    const items = groups.flatMap(group => group.items)
+
+    return (
+        <Controller
+            name={name}
+            control={control}
+            render={({ field, fieldState: { error, invalid } }) => (
+                <Field data-invalid={invalid}>
+                    <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
+                    <Select
+                        items={items}
+                        name={name}
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value)}
+                    >
+                        <SelectTrigger className='w-full'>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent alignItemWithTrigger={false}>
+                            {groups.map((group, i) => (
+                                <SelectGroup key={i}>
+                                    {group.label && <SelectLabel>{group.label}</SelectLabel>}
+                                    {group.items.map((item) => (
+                                        <SelectItem key={item.value} value={item.value}>
+                                            {item.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {invalid && <FieldError errors={[error]} />}
+                </Field>
+            )}
+        />
+    )
+}
+
+type RHFSelectProps = React.ComponentProps<'select'> & {
+    name: string
+    fieldLabel: string
+    children: React.ReactNode
+}
 
 export function RHFSelect({
     name,
@@ -16,7 +78,7 @@ export function RHFSelect({
     size, // Destructure size to prevent it from being passed to NativeSelect
     ...other
 }: RHFSelectProps) {
-    const { control } = useFormContext();
+    const { control } = useFormContext()
 
     return (
         <Controller
@@ -33,13 +95,13 @@ export function RHFSelect({
                 </Field>
             )}
         />
-    );
+    )
 }
 
 type RHFMultiSelectProps = Omit<MultiSelectProps, 'onValueChange'> & {
-    name: string;
-    fieldLabel: string,
-};
+    name: string
+    fieldLabel: string
+}
 
 export function RHFMultiSelect({
     name,
@@ -57,9 +119,8 @@ export function RHFMultiSelect({
                 <Field data-invalid={invalid}>
                     <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
                     <MultiSelect
-                        className='min-h-9'
-                        aria-invalid={invalid}
                         {...other}
+                        aria-invalid={invalid}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                     />
@@ -67,5 +128,5 @@ export function RHFMultiSelect({
                 </Field>
             )}
         />
-    );
+    )
 }

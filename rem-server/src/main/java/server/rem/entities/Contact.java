@@ -103,6 +103,5 @@ public class Contact extends Base {
     private String zipCode;
 
     @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // @JsonIgnoreProperties("")
     private Set<Campaign> campaigns;
 }

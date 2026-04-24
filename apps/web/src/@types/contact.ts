@@ -14,6 +14,7 @@ export type CustomerGroup = {
 }
 
 export type Contact = {
+    id: string
     type: ContactType
     firstName: string
     lastName: string

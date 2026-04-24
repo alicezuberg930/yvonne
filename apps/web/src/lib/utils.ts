@@ -99,10 +99,6 @@ const quillCss = `
   u { text-decoration: underline; }
   s { text-decoration: line-through; }
 
-  ul { list-style-type: disc; padding-left: 1.5em; }
-  ol { list-style-type: decimal; padding-left: 1.5em; }
-  li { margin-bottom: 0.25em; }
-
   a { color: #0066cc; text-decoration: underline; }
 
   blockquote {
@@ -118,10 +114,48 @@ const quillCss = `
     font-family: monospace;
     white-space: pre-wrap;
   }
+
+  li[data-list="ordered"] {
+    counter-increment: list-0;
+  }
+
+  li {
+    padding-left: 1.5em;
+    list-style-type: none;
+    position: relative;
+  }
+
+  .ql-ui {
+    position: absolute;
+  }
+
+  li > .ql-ui::before {
+    text-align: right;
+    white-space: nowrap;
+    width: 1.2em;
+    margin-left: -1.5em;
+    margin-right: .3em;
+    display: inline-block;
+  }
+
+  li[data-list="bullet"] > .ql-ui::before {
+    content: "•";
+  }
+
+  li[data-list="ordered"] > .ql-ui::before {
+    content: counter(list-0, decimal) ". ";
+  }
+
+  ul { list-style-type: disc; }
+  ol { list-style-type: decimal; }
 `
 
 export const inlineQuillStyles = (html: string): string => {
   const wrapped = `<div>${html}</div>`
-  const inlined = juice.inlineContent(wrapped, quillCss)
+  const inlined = juice.inlineContent(wrapped, quillCss, {
+    inlinePseudoElements: true,
+    removeStyleTags: true,
+    applyStyleTags: true,
+  })
   return inlined
 }

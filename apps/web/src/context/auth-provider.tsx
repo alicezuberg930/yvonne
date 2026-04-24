@@ -13,7 +13,7 @@ import {
 import type { Profile } from "@/@types/user"
 import { AuthValidators } from '@/validators/auth'
 import { toast } from 'sonner'
-import { Role } from '@/@types/role'
+import { Role } from '@/@types'
 import { getCookie } from '@/lib/cookies'
 
 export type ActionMapType<M extends { [index: string]: any }> = {

@@ -6,6 +6,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import server.rem.entities.Campaign;
 import server.rem.enums.CampaignStatus;
@@ -15,14 +16,15 @@ import server.rem.utils.exceptions.ResourceNotFoundException;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CampaignJob implements Job {
     // Use @Autowired here instead of constructor dependency injection. Quartz
     // instantiates this itself
-    @Autowired
-    private CampaignRepository campaignRepository;
+    // @Autowired
+    private final CampaignRepository campaignRepository;
 
-    @Autowired
-    private CampaignService campaignService;
+    // @Autowired
+    private final CampaignService campaignService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -39,16 +41,11 @@ public class CampaignJob implements Job {
             log.warn("Campaign {} is not PENDING ({}), skipping", campaignId, campaign.getStatus());
             return;
         }
-
         try {
-            campaign.setStatus(CampaignStatus.PROCESSING);
-            campaignRepository.save(campaign);
             campaignService.sendCampaign(campaignId, campaign.getBusiness().getId());
-            campaign.setStatus(CampaignStatus.SENT);
             log.info("Campaign {} sent successfully", campaignId);
         } catch (Exception e) {
             log.error("Failed to send campaign {}", campaignId, e);
-            campaign.setStatus(CampaignStatus.FAILED);
             throw new JobExecutionException(e);
         } finally {
             campaignRepository.save(campaign);

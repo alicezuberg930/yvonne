@@ -7,3 +7,5 @@ export type Template = {
     contactPhone: string | null
     websiteUrl: string | null
 }
+
+// export type CreateTemplate = Template

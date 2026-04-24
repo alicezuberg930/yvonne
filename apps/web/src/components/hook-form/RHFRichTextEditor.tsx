@@ -1,3 +1,4 @@
+'use client'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import ReactQuill from 'react-quill-new'
@@ -44,7 +45,7 @@ export const RHFRichTextEditor = ({
         toolbar: {
             container: [
                 [{ header: [1, 2, 3, 4, 5, false] }],
-                ['bold', 'italic', 'underline'],
+                ['bold', 'italic', 'underline', 'strike'],
                 [{ list: 'ordered' }, { list: 'bullet' }],
                 ['link'],
                 [{ align: ['', 'center', 'right', 'justify'] }],
@@ -62,6 +63,7 @@ export const RHFRichTextEditor = ({
         'bold',
         'italic',
         'underline',
+        'strike',
         'list',
         'link',
         'image',
@@ -82,7 +84,7 @@ export const RHFRichTextEditor = ({
                             ref={quillRef}
                             theme="snow"
                             value={field.value}
-                            onChange={(v) => field.onChange(v)}
+                            onChange={(_value, _delta, _source, editor) => field.onChange(editor.getHTML())}
                             modules={modules}
                             formats={formats}
                             className={cn(invalid && 'quill-error')}

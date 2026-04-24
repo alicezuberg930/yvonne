@@ -4,27 +4,46 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
-import server.rem.dtos.template.CreateTemplateDto;
-import server.rem.entities.Business;
-import server.rem.entities.Template;
+import lombok.RequiredArgsConstructor;
+import server.rem.common.messages.*;
+import server.rem.dtos.template.*;
+import server.rem.entities.*;
 import server.rem.mappers.TemplateMapper;
-import server.rem.repositories.BusinessRepository;
-import server.rem.repositories.TemplateRepository;
+import server.rem.repositories.*;
+import server.rem.utils.exceptions.ResourceNotFoundException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TemplateService {
+    // repoistories
     private final TemplateRepository templateRepository;
     private final BusinessRepository businessRepository;
+    // mappers
     private final TemplateMapper templateMapper;
 
-    public Template createTemplate(CreateTemplateDto dto) {
-        Business business = businessRepository.findById(dto.getBusinessId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
+    public Template createTemplate(CreateTemplateDto dto, String businessId) {
+        Business business = businessRepository.findById(businessId)
+                .orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
         Template template = templateMapper.toEntity(dto, business);
         return templateRepository.save(template);
+    }
+
+    public Template updateTemplate(UpdateTemplateDto dto, String id, String businessId) {
+        businessRepository.findById(businessId)
+                .orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
+        Template template = templateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(TemplateMessages.NOT_FOUND));
+        templateMapper.updateEntity(dto, template);
+        return templateRepository.save(template);
+    }
+
+    public Template deleteTemplate(String id, String businessId) {
+        businessRepository.findById(businessId)
+                .orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
+        Template template = templateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(TemplateMessages.NOT_FOUND));
+        templateRepository.delete(template);
+        return template;
     }
 
     public List<Template> getTemplates() {

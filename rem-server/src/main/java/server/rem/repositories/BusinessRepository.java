@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BusinessRepository extends JpaRepository<Business, String> {
-    @EntityGraph(attributePaths = { "users", "owner" })
+    @EntityGraph(attributePaths = { "businessUsers", "owner" })
     List<Business> findAllByOwner(User user);
 
-    @EntityGraph(attributePaths = { "users", "owner" })
+    @EntityGraph(attributePaths = { "businessUsers", "owner" })
     List<Business> findAll();
 
-    @EntityGraph(attributePaths = { "users", "owner" })
+    @EntityGraph(attributePaths = { "businessUsers", "owner" })
     Optional<Business> findById(String id);
 }

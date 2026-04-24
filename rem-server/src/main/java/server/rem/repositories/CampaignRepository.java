@@ -30,4 +30,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, String>, Jpa
     """)
     List<Campaign> findDueCampaigns(@Param("now") LocalDateTime now);
 
+    
+    @Query("SELECT c FROM Campaign c LEFT JOIN FETCH c.contacts LEFT JOIN FETCH c.template WHERE c.id = :id")
+    Optional<Campaign> findByIdWithContactsAndTemplate(@Param("id") String id);
 }

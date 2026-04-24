@@ -4,17 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { Loader2, LogIn } from 'lucide-react'
 import { IconFacebook, IconGithub } from '@/assets/brand-icons'
-import { useAuthStore } from '@/stores/auth-store'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { FormProvider, RHFPasswordField, RHFTextField } from '@/components/hook-form'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { AuthValidators } from '@/validators/auth'
@@ -29,7 +20,6 @@ export function SignInForm({
   redirectTo,
   ...props
 }: UserAuthFormProps) {
-  const { auth } = useAuthStore()
   const { signIn } = useAuth()
 
   const form = useForm<AuthValidators.SignIn>({
@@ -42,17 +32,7 @@ export function SignInForm({
 
   const { handleSubmit, formState: { isSubmitting } } = form
 
-  const onSubmit = async (data: AuthValidators.SignIn) => {
-    await signIn(data)
-    const mockUser = {
-      accountNo: 'ACC001',
-      email: data.email,
-      role: ['user'],
-      exp: Date.now() + 24 * 60 * 60 * 1000,
-    }
-    auth.setUser(mockUser)
-    auth.setAccessToken('mock-access-token')
-  }
+  const onSubmit = async (data: AuthValidators.SignIn) => await signIn(data)
 
   return (
     <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)}>
