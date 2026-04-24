@@ -22,7 +22,6 @@ import server.rem.dtos.campaign.CampaignResponse;
 import server.rem.dtos.campaign.CreateCampaignDto;
 import server.rem.dtos.campaign.QueryCampaignDto;
 import server.rem.dtos.campaign.UpdateCampaignDto;
-import server.rem.entities.Campaign;
 import server.rem.services.CampaignService;
 import server.rem.views.Views;
 

@@ -18,7 +18,6 @@ import { HttpError } from '@/lib/repository/httpError'
 import { CampaignValidators } from '@/validators/campaign'
 import { useCampaigns } from './campaign-provider'
 import { createCampaign, updateCampaign } from '@/lib/repository/api'
-import { format } from 'date-fns'
 
 type CampaignActionDialogProps = {
   currentRow?: Campaign
@@ -62,19 +61,13 @@ export function CampaignsActionDialog({
   const { handleSubmit, reset } = form
 
   const onSubmit = async (values: CampaignValidators.CampaignForm) => {
-    const data = {
-      ...values,
-      // status: "DRAFT",
-      ...(values.scheduleAt && { scheduleAt: format(values.scheduleAt, "yyyy-MM-dd'T'HH:mm:ss") })
-    }
-    console.log(format(values.scheduleAt!, "yyyy-MM-dd'T'HH:mm:ss"))
     const submit = async () => {
       let response
       try {
         if (values.isEdit) {
-          response = await updateCampaign(data, currentRow?.id!)
+          response = await updateCampaign(values, currentRow?.id!)
         } else {
-          response = await createCampaign(data)
+          response = await createCampaign(values)
         }
         return response
       } catch (error) {

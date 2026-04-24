@@ -8,23 +8,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import server.rem.dtos.business.AddUserToBusinessDto;
-import server.rem.dtos.business.BusinessResponse;
-import server.rem.dtos.business.CreateBusinessDto;
-import server.rem.dtos.business.UpdateBusinessDto;
-import server.rem.entities.Business;
-import server.rem.entities.BusinessUser;
-import server.rem.entities.BusinessUserId;
-import server.rem.entities.Role;
-import server.rem.entities.User;
-import server.rem.mappers.AddUserToBusinessMapper;
-import server.rem.mappers.BusinessMapper;
-import server.rem.repositories.BusinessRepository;
-import server.rem.repositories.BusinessUserRepository;
-import server.rem.repositories.RoleRepository;
-import server.rem.repositories.UserRepository;
-import server.rem.utils.exceptions.ResourceNotFoundException;
-import server.rem.utils.exceptions.UnauthorizedException;
+import server.rem.common.messages.BusinessMessages;
+import server.rem.dtos.business.*;
+import server.rem.entities.*;
+import server.rem.mappers.*;
+import server.rem.repositories.*;
+import server.rem.utils.exceptions.*;
 import server.rem.utils.mail.DynamicMail;
 
 import java.nio.charset.StandardCharsets;
@@ -55,18 +44,29 @@ public class BusinessService {
         return businessMapper.toBusinessesResponse(businesses);
     }
 
-    public Business createBusinesses(String userId, CreateBusinessDto dto) {
-        if (userId == null) throw new UnauthorizedException("User id is required");
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Business business = businessMapper.toEntity(dto);
-        business.setOwner(user);
-        return businessRepository.save(business);
+    @Transactional
+    public Business createBusinesses(String ownerId, CreateBusinessDto dto) {
+        User owner = userRepository.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Business business = businessRepository.save(businessMapper.toEntity(dto, owner));
+        Role role = roleRepository.findByName("OWNER").orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        BusinessUser businessUser = BusinessUser.builder()
+                .id(new BusinessUserId(business.getId(), ownerId))
+                .isVerified(true)
+                .business(business)
+                .salary(0)
+                .dependants(0)
+                .user(owner)
+                .role(role)
+                .build();
+        businessUserRepository.save(businessUser);
+        return business;
     }
 
     @Transactional
     public User addUserToBusiness(String invitorId, AddUserToBusinessDto dto, String businessId) throws Exception {
-        if(businessUserRepository.findByUserEmailAndBusinessId(dto.getEmail(), businessId).isPresent())
-            throw new RuntimeException("User is already a member of this business");
+        businessUserRepository.findByUserEmailAndBusinessId(dto.getEmail(), businessId).ifPresent((bu) -> {
+            throw new RuntimeException(BusinessMessages.ALREADY_INVITED);
+        }); 
         Business business = businessRepository.findById(businessId).orElseThrow(() -> new RuntimeException("Business not found"));
         Role role = roleRepository.findById(dto.getRoleId()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
         User user;

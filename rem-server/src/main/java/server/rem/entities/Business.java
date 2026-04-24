@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import server.rem.enums.MailProvider;
-import server.rem.enums.PhoneDriver;
+import server.rem.enums.PhoneProvider;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -27,6 +27,9 @@ public class Business extends Base {
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({ "user", "invitor" })
     private List<BusinessUser> businessUsers;
+
+    @Column(name = "description", length = 255, nullable = true)
+    private String description;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;
@@ -107,7 +110,7 @@ public class Business extends Base {
     private MailProvider mailProvider = MailProvider.SMTP;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "phone_driver", nullable = true)
+    @Column(name = "phone_provider", nullable = true)
     @Builder.Default
-    private PhoneDriver phoneDriver = PhoneDriver.TWILIO;
+    private PhoneProvider phoneProvider = PhoneProvider.TWILIO;
 }

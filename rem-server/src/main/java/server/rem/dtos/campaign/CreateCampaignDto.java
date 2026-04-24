@@ -1,6 +1,6 @@
 package server.rem.dtos.campaign;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -27,7 +27,7 @@ public class CreateCampaignDto {
 
     private String description;
 
-    private LocalDateTime scheduleAt;
+    private Instant scheduleAt;
 
     private List<String> contactIds;
 }

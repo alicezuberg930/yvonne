@@ -45,7 +45,7 @@ public class ContactController {
     }
  
     @PostMapping
-    @PreAuthorize("hasAuthority('contact.create')")
+    // @PreAuthorize("hasAuthority('contact.create')")
     public ResponseEntity<APIResponse<Contact>> create(@Valid @RequestBody CreateContactDto dto) {
         return ResponseEntity.ok(APIResponse.success(201, "Contact created", contactService.create(dto)));
     }

@@ -2,9 +2,9 @@ import { CAMPAIGN_SEND_TYPE, CAMPAIGN_STATUS } from '@/@types'
 import * as z from 'zod'
 
 export namespace CampaignValidators {
-    const campaignSendTypeSchema = z.union(Object.entries(CAMPAIGN_SEND_TYPE).map(status => z.literal(status[1])))
+    const campaignSendTypeSchema = z.union(Object.entries(CAMPAIGN_SEND_TYPE).map(type => z.literal(type[1])))
 
-    const campaignStatusSchema = z.union(Object.entries(CAMPAIGN_STATUS).map(status => z.literal(status[1])))
+    // const campaignStatusSchema = z.union(Object.entries(CAMPAIGN_STATUS).map(status => z.literal(status[1])))
 
     export const formSchema = z
         .object({

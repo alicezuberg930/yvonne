@@ -54,7 +54,6 @@ import org.springframework.stereotype.Component;
 import server.rem.entities.Campaign;
 import server.rem.jobs.CampaignJob;
 
-import java.time.ZoneId;
 import java.util.Date;
 
 @Slf4j
@@ -102,7 +101,8 @@ public class CampaignScheduler {
     }
 
     private Trigger buildTrigger(Campaign campaign) {
-        Date fireAt = Date.from(campaign.getScheduleAt().atZone(ZoneId.systemDefault()).toInstant());
+        Date fireAt = Date.from(campaign.getScheduleAt());
+        
         return TriggerBuilder.newTrigger()
                 .withIdentity("trigger_campaign_" + campaign.getId())
                 .startAt(fireAt)

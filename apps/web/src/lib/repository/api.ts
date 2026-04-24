@@ -1,10 +1,11 @@
 import { Profile } from '@/@types/user'
 import { httpClient } from './httpClient'
 import { AuthValidators } from '@/validators/auth'
-import { Campaign, Role, Template, ApiResponse, PaginatedApiResponse, Contact } from '@/@types'
+import { Campaign, Role, Template, ApiResponse, PaginatedApiResponse, Contact, Business } from '@/@types'
 import { getCookie } from '../cookies'
 import { TemplateValidators } from '@/validators/template'
 import { CampaignValidators } from '@/validators/campaign'
+import { BusinessValidators } from '@/validators/business'
 
 // authentication
 export const signIn = async (data: AuthValidators.SignIn): Promise<ApiResponse<{ user: Profile, accessToken: string }>> => {
@@ -64,11 +65,11 @@ export const getCampaigns = async (): Promise<ApiResponse<Campaign[]>> => {
     return await httpClient.get<ApiResponse<Campaign[]>>('/campaigns')
 }
 
-export const createCampaign = async (data: any): Promise<ApiResponse<Campaign>> => {
+export const createCampaign = async (data: CampaignValidators.CampaignForm): Promise<ApiResponse<Campaign>> => {
     return await httpClient.post<ApiResponse<Campaign>>('/campaigns', { ...data })
 }
 
-export const updateCampaign = async (data: any, id: string): Promise<ApiResponse<Campaign>> => {
+export const updateCampaign = async (data: CampaignValidators.CampaignForm, id: string): Promise<ApiResponse<Campaign>> => {
     return await httpClient.put<ApiResponse<Campaign>>(`/campaigns/${id}`, { ...data })
 }
 
@@ -79,4 +80,9 @@ export const deleteCampaign = async (id: string): Promise<ApiResponse<Campaign>>
 // contacts management
 export const getContacts = async (): Promise<PaginatedApiResponse<Contact[]>> => {
     return await httpClient.get<PaginatedApiResponse<Contact[]>>('/contacts')
+}
+
+// business management
+export const createBusiness = async (data: BusinessValidators.BusinessForm): Promise<ApiResponse<Business>> => {
+    return await httpClient.post<ApiResponse<Business>>('/businesses', { ...data })
 }

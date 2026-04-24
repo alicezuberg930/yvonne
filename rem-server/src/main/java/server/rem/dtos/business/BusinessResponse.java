@@ -34,5 +34,7 @@ public class BusinessResponse {
     @JsonView({ Views.Business.class, Views.Attendance.class })
     private String twilioAccountSid;
 
+    @JsonView(Views.Public.class)
+    private String description;
     
 }

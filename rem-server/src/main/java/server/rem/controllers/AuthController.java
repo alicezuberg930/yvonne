@@ -16,11 +16,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import server.rem.annotations.RequestUser;
 import server.rem.common.messages.AuthMessages;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.auth.RoleResponse;
-import server.rem.dtos.auth.SignInUserRequest;
-import server.rem.dtos.auth.SignInUserResponse;
-import server.rem.dtos.auth.SignUpUserRequest;
-import server.rem.dtos.auth.UserProfileResponse;
+import server.rem.dtos.auth.*;
 import server.rem.services.AuthService;
 import server.rem.views.Views;
 

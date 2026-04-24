@@ -1,5 +1,5 @@
 package server.rem.enums;
 
-public enum PhoneDriver {
+public enum PhoneProvider {
     TWILIO, VONAGE, OTHER
 }

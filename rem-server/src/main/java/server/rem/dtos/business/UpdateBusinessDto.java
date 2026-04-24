@@ -3,7 +3,7 @@ package server.rem.dtos.business;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import server.rem.enums.MailProvider;
-import server.rem.enums.PhoneDriver;
+import server.rem.enums.PhoneProvider;
 
 import java.time.LocalTime;
 
@@ -13,6 +13,9 @@ import java.time.LocalTime;
 public class UpdateBusinessDto {
     @Size(max = 100)
     private String name;
+
+    @Size(max = 255)
+    private String description;
 
     @Size(max = 100)
     private String slug;
@@ -67,7 +70,7 @@ public class UpdateBusinessDto {
 
     private MailProvider mailProvider;
 
-    private PhoneDriver phoneDriver;
+    private PhoneProvider phoneProvider;
 
     @Size(max = 255)
     private String sendGridApiKey;

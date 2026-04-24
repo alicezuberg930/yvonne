@@ -11,15 +11,14 @@ import server.rem.dtos.business.BusinessResponse;
 import server.rem.dtos.business.CreateBusinessDto;
 import server.rem.dtos.business.UpdateBusinessDto;
 import server.rem.entities.Business;
+import server.rem.entities.User;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BusinessMapper {
-    @Mapping(target = "owner", ignore = true)
-    // @Mapping(target = "users", ignore = true)
-    Business toEntity(CreateBusinessDto dto);
+    @Mapping(target = "owner", source = "owner")
+    Business toEntity(CreateBusinessDto dto, User owner);
 
     @Mapping(target = "owner", ignore = true)
-    // @Mapping(target = "users", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)

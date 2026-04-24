@@ -68,11 +68,17 @@ export const campaignsColumns: ColumnDef<Campaign>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Scheduled at' />
     ),
-    cell: ({ row }) => (
-      <LongText className='max-w-36 ps-3'>
-        {row.getValue('scheduleAt') != null && format(row.getValue('scheduleAt'), "dd/MM/yyyy HH:mm")}
-      </LongText>
-    ),
+    cell: ({ row }) => {
+      const date = row.getValue('scheduleAt') != null && new Date(row.getValue('scheduleAt')).toLocaleString("vi-VN", {
+        timeZone: "Asia/Ho_Chi_Minh"
+      });
+      // format(row.getValue('scheduleAt'), "dd/MM/yyyy HH:mm")
+      return (
+        <LongText className='max-w-36 ps-3'>
+          {date}
+        </LongText>
+      )
+    },
     enableSorting: true,
   },
   {

@@ -41,25 +41,25 @@ public class BusinessUser {
     private Boolean isVerified = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = true)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "salary", nullable = false)
+    @Column(name = "salary", nullable = true)
     private Integer salary;
 
-    @Column(name = "bank_owner", nullable = false)
+    @Column(name = "bank_owner", nullable = true)
     private String bankOwner;
 
-    @Column(name = "bank_account", nullable = false)
+    @Column(name = "bank_account", nullable = true)
     private String bankAccount;
 
-    @Column(name = "bank_name", nullable = false)
+    @Column(name = "bank_name", nullable = true)
     private String bankName;
 
-    @Column(name = "bank_code", nullable = false)
+    @Column(name = "bank_code", nullable = true)
     private String bankCode;
 
-    @Column(name = "bank_branch", nullable = false)
+    @Column(name = "bank_branch", nullable = true)
     private String bankBranch;
 
     @Column(name = "dependants", nullable = false)

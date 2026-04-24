@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation"
 import { Typography } from "@/components/ui/typography"
 import { setCookie } from "@/lib/cookies"
 import { useAuth } from "@/context/auth-provider"
+import { NewBusinessDialog } from "./components/new-business-dialog"
+import useDialogState from "@/hooks/use-dialog-state"
 
 const roleColors: Record<string, string> = {
     'Owner': 'bg-blue-100 text-blue-800',
@@ -20,6 +22,7 @@ const roleColors: Record<string, string> = {
 export default function BusinessesPage() {
     const router = useRouter()
     const { user, getCurrentRole } = useAuth()
+    const [open, setOpen] = useDialogState<"add">(null)
 
     const accessBusiness = async (businessId: string) => {
         setCookie("X-Business-Id", businessId)
@@ -31,14 +34,14 @@ export default function BusinessesPage() {
         <div className="p-4 md:p-8">
             <Typography variant={'h5'}>Here is a list of your businesses</Typography>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {user && user.businesses.map((business, index) => (
+                {user?.businesses?.map((business, index) => (
                     <Card
                         key={index} onClick={() => accessBusiness(business.id)}
                         className="pt-0 flex flex-col overflow-hidden hover:shadow-md transition-shadow"
                     >
                         <div className="relative w-full h-48 bg-muted">
                             <Image
-                                src={business.logoUrl}
+                                src={business.logoUrl ?? "./assets/placeholder.webp"}
                                 alt={business.name}
                                 fill
                                 className="object-cover"
@@ -62,15 +65,20 @@ export default function BusinessesPage() {
                     </Card>
                 ))}
 
-                <Card className="flex items-center justify-center min-h-64 cursor-pointer hover:shadow-md transition-shadow bg-muted/50">
-                    <Link href="/businesses/create" className="w-full h-full flex items-center justify-center">
-                        <Button variant="ghost" size="lg" className="flex-col gap-2 h-auto py-8">
+                <Card className="min-h-64 cursor-pointer bg-muted/50 p-0">
+                    <Button onClick={() => setOpen("add")} variant="ghost" className="w-full h-full flex items-center justify-center">
+                        <div className="flex flex-col gap-3 items-center">
                             <Plus className="size-8" />
                             <span>Create New Business</span>
-                        </Button>
-                    </Link>
+                        </div>
+                    </Button>
                 </Card>
             </div>
+
+            <NewBusinessDialog
+                open={open === "add"}
+                onOpenChange={() => setOpen("add")}
+            />
         </div>
     )
 }

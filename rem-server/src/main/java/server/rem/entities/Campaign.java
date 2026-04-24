@@ -1,6 +1,6 @@
 package server.rem.entities;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,7 +37,7 @@ public class Campaign extends Base {
     private CampaignSendType sendType;
 
     @Column(name = "schedule_at", nullable = true)
-    private LocalDateTime scheduleAt;
+    private Instant scheduleAt;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "campaign_contact", joinColumns = @JoinColumn(name = "campaign_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "id"))

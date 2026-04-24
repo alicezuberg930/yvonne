@@ -10,4 +10,5 @@ public class BusinessMessages {
     public static String NO_READ_PERMISSION = "You don't have permisson to see business";
     public static String LIST_RETRIEVED = "Business list retrieved successfully";
     public static String ITEM_RETRIEVED = "Business retrieved successfully";
+    public static String ALREADY_INVITED = "User is already a member of this business";
 }

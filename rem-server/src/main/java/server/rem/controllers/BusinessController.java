@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import server.rem.annotations.RequestUser;
+import server.rem.common.messages.BusinessMessages;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.business.AddUserToBusinessDto;
-import server.rem.dtos.business.BusinessResponse;
-import server.rem.dtos.business.CreateBusinessDto;
-import server.rem.dtos.business.UpdateBusinessDto;
-import server.rem.entities.Business;
-import server.rem.entities.User;
+import server.rem.dtos.business.*;
+import server.rem.entities.*;
 import server.rem.services.BusinessService;
 import server.rem.views.Views;
 
@@ -33,7 +30,7 @@ public class BusinessController {
     public ResponseEntity<APIResponse<Business>> createBusiness(@RequestUser String userId, @Valid @RequestBody CreateBusinessDto dto) {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
-                "Business created successfully",
+                BusinessMessages.CREATED,
                 businessService.createBusinesses(userId, dto)
         ));
     }
@@ -43,7 +40,7 @@ public class BusinessController {
     public ResponseEntity<APIResponse<List<BusinessResponse>>> getAllBusinesses(@Nullable @RequestUser String userId) {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
-                "Business list retrieved successfully",
+                BusinessMessages.LIST_RETRIEVED,
                 businessService.getAllBusinesses(userId)
         ));
     }
