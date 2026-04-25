@@ -2,16 +2,16 @@ package server.rem.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import server.rem.dtos.attendance.QueryAttendanceDto;
+import server.rem.dtos.attendance.QueryAttendance;
 import server.rem.entities.Attendance;
 
 import java.time.LocalDate;
 
 public class AttendanceSpecification {
 
-    public static Specification<Attendance> withFilters(QueryAttendanceDto dto) {
+    public static Specification<Attendance> withFilters(QueryAttendance dto, String userId) {
         return Specification
-                .where(hasUserId(dto.getUserId()))
+                .where(hasUserId(userId))
                 .and(hasStartDate(dto.getStartDate()))
                 .and(hasEndDate(dto.getEndDate()));
     }

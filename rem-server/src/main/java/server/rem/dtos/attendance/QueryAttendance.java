@@ -1,20 +1,14 @@
 package server.rem.dtos.attendance;
 
 import lombok.*;
+import server.rem.dtos.PaginateQuery;
 
 import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
-@ToString
-@Setter
-public class QueryAttendanceDto {
-    private String userId;
-
+public class QueryAttendance extends PaginateQuery {
     private LocalDate startDate;
 
     private LocalDate endDate;
-
-    private String limit;
-
-    private String page;
 }

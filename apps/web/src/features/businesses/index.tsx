@@ -4,10 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Typography } from "@/components/ui/typography"
-import { setCookie } from "@/lib/cookies"
+// import { setCookie } from "@/lib/cookies"
 import { useAuth } from "@/context/auth-provider"
 import { NewBusinessDialog } from "./components/new-business-dialog"
 import useDialogState from "@/hooks/use-dialog-state"
@@ -25,7 +24,7 @@ export default function BusinessesPage() {
     const [open, setOpen] = useDialogState<"add">(null)
 
     const accessBusiness = async (businessId: string) => {
-        setCookie("X-Business-Id", businessId)
+        // setCookie("X-Business-Id", businessId)
         getCurrentRole(businessId)
         router.push('/dashboard')
     }

@@ -13,7 +13,7 @@ export const signIn = async (data: AuthValidators.SignIn): Promise<ApiResponse<{
 }
 
 export const signUp = async (data: AuthValidators.SignUp): Promise<ApiResponse<Profile>> => {
-    return await httpClient.post<ApiResponse<Profile>>('/auth/sign-in', { ...data })
+    return await httpClient.post<ApiResponse<Profile>>('/auth/sign-up', { ...data })
 }
 
 export const profile = async (): Promise<ApiResponse<Profile>> => {
@@ -61,8 +61,8 @@ export const deleteTemplate = async (id: string): Promise<ApiResponse<Template>>
 }
 
 // campaigns management
-export const getCampaigns = async (): Promise<ApiResponse<Campaign[]>> => {
-    return await httpClient.get<ApiResponse<Campaign[]>>('/campaigns')
+export const getCampaigns = async (): Promise<PaginatedApiResponse<Campaign[]>> => {
+    return await httpClient.get<PaginatedApiResponse<Campaign[]>>('/campaigns')
 }
 
 export const createCampaign = async (data: CampaignValidators.CampaignForm): Promise<ApiResponse<Campaign>> => {

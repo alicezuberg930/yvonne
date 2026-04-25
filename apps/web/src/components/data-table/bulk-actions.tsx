@@ -92,7 +92,7 @@ export function DataTableBulkActions<TData>({
         // Check if the Escape key came from a dropdown trigger or content
         // We can't check dropdown state because Radix UI closes it before our handler runs
         const target = event.target as HTMLElement
-        const activeElement = document.activeElement as HTMLElement
+        const activeElement = typeof window !== 'undefined' ? document.activeElement as HTMLElement : undefined
 
         // Check if the event target or currently focused element is a dropdown trigger
         const isFromDropdownTrigger =

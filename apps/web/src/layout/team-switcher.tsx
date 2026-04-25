@@ -1,5 +1,6 @@
+'use client'
 import * as React from 'react'
-import { ChevronsUpDown, Plus } from 'lucide-react'
+import { ChevronsUpDown, Command, Plus } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,18 +17,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { useAuth } from '@/context/auth-provider'
+import Image from 'next/image'
+import { Business, Role } from '@/@types'
+// import { getCookie, setCookie } from '@/lib/cookies'
+import { useRouter } from 'next/navigation'
 
-type TeamSwitcherProps = {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}
-
-export function TeamSwitcher({ teams }: TeamSwitcherProps) {
+export function TeamSwitcher() {
+  const router = useRouter()
+  const { user } = useAuth()
   const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+  const [activeTeam, setActiveTeam] = React.useState<Business & { role: Role } | undefined>(undefined)
+
+  React.useEffect(() => {
+    // setActiveTeam(user?.businesses.find(b => b.id === getCookie('X-Business-Id')))
+  }, [user])
 
   return (
     <SidebarMenu>
@@ -39,14 +43,14 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
                 size='lg'
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
               >
-                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-                  <activeTeam.logo className='size-4' />
+                <div className='relative aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary overflow-hidden'>
+                  <Image fill src={activeTeam?.logoUrl ?? "/assets/placeholder.webp"} alt='active' />
                 </div>
                 <div className='grid flex-1 text-start text-sm leading-tight'>
                   <span className='truncate font-semibold'>
-                    {activeTeam.name}
+                    {activeTeam?.name}
                   </span>
-                  <span className='truncate text-xs'>{activeTeam.plan}</span>
+                  <span className='truncate text-xs'>{activeTeam?.description}</span>
                 </div>
                 <ChevronsUpDown className='ms-auto' />
               </SidebarMenuButton>
@@ -62,16 +66,20 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
               <DropdownMenuLabel className='text-xs text-muted-foreground'>
                 Teams
               </DropdownMenuLabel>
-              {teams.map((team, index) => (
+              {user?.businesses?.map((business, index) => (
                 <DropdownMenuItem
-                  key={team.name}
-                  onClick={() => setActiveTeam(team)}
+                  key={business.name}
+                  onClick={() => {
+                    setActiveTeam(business)
+                    // setCookie("X-Business-Id", business.id)
+                    router.push('/dashboard')
+                  }}
                   className='gap-2 p-2'
                 >
                   <div className='flex size-6 items-center justify-center rounded-sm border'>
-                    <team.logo className='size-4 shrink-0' />
+                    <Image alt={business.name} className='shrink-0' width={16} height={16} src={business.logoUrl ?? "/assets/placeholder.webp"} />
                   </div>
-                  {team.name}
+                  {business.name}
                   <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
                 </DropdownMenuItem>
               ))}

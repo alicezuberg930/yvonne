@@ -1,41 +1,30 @@
 package server.rem.services;
 
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import server.rem.dtos.attendance.AttendanceDto;
-import server.rem.dtos.attendance.QueryAttendanceDto;
-import server.rem.entities.Attendance;
-import server.rem.entities.Business;
-import server.rem.entities.User;
+import lombok.RequiredArgsConstructor;
+import server.rem.dtos.attendance.*;
+import server.rem.entities.*;
 import server.rem.enums.CheckInStatus;
 import server.rem.mappers.AttendanceMapper;
-import server.rem.repositories.AttendanceRepository;
-import server.rem.repositories.BusinessRepository;
-import server.rem.repositories.UserRepository;
+import server.rem.repositories.*;
 import server.rem.specifications.AttendanceSpecification;
-import server.rem.utils.exceptions.ConflictException;
-import server.rem.utils.exceptions.ResourceNotFoundException;
+import server.rem.utils.exceptions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Service
+@RequiredArgsConstructor
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final UserRepository userRepository;
     private final BusinessRepository businessRepository;
-
-    public AttendanceService(AttendanceRepository attendanceRepository, UserRepository userRepository, BusinessRepository businessRepository) {
-        this.attendanceRepository = attendanceRepository;
-        this.userRepository = userRepository;
-        this.businessRepository = businessRepository;
-    }
 
     public Attendance checkIn(String userId, AttendanceDto dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -57,24 +46,23 @@ public class AttendanceService {
         return checkInTime.toLocalTime().isAfter(workStartTime) ? CheckInStatus.LATE : CheckInStatus.ON_TIME;
     }
 
-    @NonNull
-    private Page<Attendance> getAttendanceList(QueryAttendanceDto dto) {
+    private Page<Attendance> getAttendanceList(QueryAttendance dto, String userId) {
         Pageable pageable = PageRequest.of(
                 dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
                 dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10
         );
-        Specification<Attendance> spec = AttendanceSpecification.withFilters(dto);
+        Specification<Attendance> spec = AttendanceSpecification.withFilters(dto, userId);
         return attendanceRepository.findAll(spec, pageable);
     }
 
-    public Page<Attendance> getMyAttendances(String userId, QueryAttendanceDto dto) {
-        dto.setUserId(userId);
-        return getAttendanceList(dto);
+    // only members are authorized
+    public Page<Attendance> getMyAttendances(QueryAttendance dto, String userId) {
+        return getAttendanceList(dto, userId);
     }
 
     // only HR, admin are authorized
-    public Page<Attendance> getAllAttendances(QueryAttendanceDto dto) {
+    public Page<Attendance> getAllAttendances(QueryAttendance dto) {
         System.out.println(dto.toString());
-        return getAttendanceList(dto);
+        return getAttendanceList(dto, null);
     }
 }

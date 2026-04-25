@@ -12,10 +12,7 @@ export namespace AuthValidators {
                 .min(10, { message: "Phone number is too short" })
                 .max(13, { message: "Phone number is too long" })
                 .regex(/(^(\+84|0|0084){1})(3|5|7|8|9)([0-9]{8})$/, "Invalid phone number"),
-            email: z.email({
-                error: (iss) =>
-                    iss.input === '' ? 'Please enter your email' : undefined,
-            }),
+            email: z.email({ error: 'Invalid Email', }),
             password: z
                 .string()
                 .min(1, 'Please enter your password')
@@ -28,9 +25,7 @@ export namespace AuthValidators {
         })
 
     export const signInSchema = z.object({
-        email: z.email({
-            error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined),
-        }),
+        email: z.email({ error: 'Invalid Email', }),
         password: z
             .string()
             .min(1, 'Please enter your password')

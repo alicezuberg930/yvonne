@@ -1,6 +1,7 @@
 package server.rem.services;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
@@ -35,6 +37,7 @@ public class AuthService {
     private final AuthMapper authMapper;
     @Value("${jwt.expiration}")
     private String jwtExpirationInS;
+    private final EmailService emailService;
 
     public RoleResponse getCurrentRole(String userId, String businessId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -77,15 +80,18 @@ public class AuthService {
         }
     }
 
-    public SignUpUserRequest signUp(SignUpUserRequest dto) {
-        try {
-            User user = UserMapper.toEntity(dto);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return dto;
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public UserProfileResponse signUp(SignUpUserRequest dto) {
+        User user = UserMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // send email to user with verify token
+        // ClassPathResource resource = new ClassPathResource("templates/register-email.html");
+        // String html = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        // html = html.replace("{{fullname}}", user.getFullname());
+        // html = html.replace("{{verifyToken}}", user.getVerifyToken());
+        // html = html.replace("http://yourdomain.com", "https://yourrealdomain.com");
+        // emailService.sendMail(businessId, user.getEmail(), "Verify your email", html);
+        return authMapper.toSummaryResponse(userRepository.save(user));
     }
 
     public UserProfileResponse profile(String userId) {

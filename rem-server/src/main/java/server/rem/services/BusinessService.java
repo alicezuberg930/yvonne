@@ -19,6 +19,7 @@ import server.rem.utils.mail.DynamicMail;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,9 @@ public class BusinessService {
     @Transactional
     public Business createBusinesses(String ownerId, CreateBusinessDto dto) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        // user cannot create more than 3 businesses
+        List<BusinessUser> ownedBusinesses = owner.getBusinessUsers().stream().filter(b -> b.getRole().getName().equals("OWNER")).collect(Collectors.toList());
+        if(ownedBusinesses.size() == 3) throw new ConflictException(BusinessMessages.EXCEED_OWNED_BUSINESS);
         Business business = businessRepository.save(businessMapper.toEntity(dto, owner));
         Role role = roleRepository.findByName("OWNER").orElseThrow(() -> new ResourceNotFoundException("User not found"));
         BusinessUser businessUser = BusinessUser.builder()
@@ -65,7 +69,7 @@ public class BusinessService {
     @Transactional
     public User addUserToBusiness(String invitorId, AddUserToBusinessDto dto, String businessId) throws Exception {
         businessUserRepository.findByUserEmailAndBusinessId(dto.getEmail(), businessId).ifPresent((bu) -> {
-            throw new RuntimeException(BusinessMessages.ALREADY_INVITED);
+            throw new ConflictException(BusinessMessages.ALREADY_INVITED);
         }); 
         Business business = businessRepository.findById(businessId).orElseThrow(() -> new RuntimeException("Business not found"));
         Role role = roleRepository.findById(dto.getRoleId()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));

@@ -159,3 +159,20 @@ export const inlineQuillStyles = (html: string): string => {
   })
   return inlined
 }
+
+export function getBaseUrl(): string {
+  if (typeof window !== 'undefined') return window.location.origin
+  if (process.env.PRODUCTION_URL) return process.env.PRODUCTION_URL
+  return `http://localhost:${process.env.PORT ?? 3000}`
+}
+
+export const slugify = (str: string): string => {
+  if (!str) return ''
+  return str.trim()
+    .normalize('NFD') // Normalize to decompose combined letters (e.g., ấ → a + ̂)
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (accents)
+    .replace(/[^A-Za-z0-9\s-đ]/g, '') // Allow Vietnamese characters, numbers, spaces, and hyphens
+    // .replace(/[^A-Za-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Collapse multiple hyphens into one
+}

@@ -2,20 +2,25 @@ package server.rem.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import server.rem.common.messages.*;
+import server.rem.dtos.CustomPageResponse;
 import server.rem.dtos.campaign.*;
 import server.rem.entities.*;
 import server.rem.enums.*;
 import server.rem.mappers.CampaignMapper;
 import server.rem.repositories.*;
 import server.rem.scheduler.CampaignScheduler;
+import server.rem.specifications.CampaignSpecification;
 import server.rem.utils.exceptions.ResourceNotFoundException;
 
 @Service
@@ -70,11 +75,14 @@ public class CampaignService {
         return campaignMapper.toCampaignResponse(updatedCampaign);
     }
 
-    public List<CampaignResponse> getCampaignList(QueryCampaignDto dto) {
-        return campaignRepository.findAll()
-                .stream()
-                .map(campaignMapper::toCampaignResponse)
-                .collect(Collectors.toList());
+    public CustomPageResponse<CampaignResponse> getCampaigns(QueryCampaign dto, String businessId) {
+        Pageable pageable = PageRequest.of(
+            dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
+            dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10
+        );
+        Specification<Campaign> spec = CampaignSpecification.withFilters(dto, businessId);
+        Page<CampaignResponse> result = campaignRepository.findAll(spec, pageable).map(campaignMapper::toCampaignResponse);
+        return new CustomPageResponse<CampaignResponse>(result);
     }
 
     @Transactional

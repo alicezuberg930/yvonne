@@ -167,7 +167,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
                     }
                 })
             } catch (err) {
-                toast.error(err instanceof Error ? err.message : 'Sign in failed')
+                // toast.error(err instanceof Error ? err.message : 'Sign in failed')
             }
         }
         profile()
@@ -198,12 +198,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const signUp = useCallback(async (data: AuthValidators.SignUp) => {
         try {
             const response = await SignUpApi(data)
-            toast.success(`Welcome back, ${response.data.fullname}!`)
+            toast.success(response.message)
             dispatch({
                 type: Types.REGISTER,
                 payload: { user: response.data }
             })
-            router.push('/businesses')
+            router.push('/sign-in')
         } catch (err) {
             toast.error(err instanceof Error ? err.message : 'Sign in failed')
         }

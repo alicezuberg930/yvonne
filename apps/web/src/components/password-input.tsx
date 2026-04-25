@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -17,7 +18,7 @@ export function PasswordInput({
   ...props
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = React.useState(false)
-  console.log(showPassword)
+
   return (
     <div className={cn('relative rounded-md', className)}>
       <input

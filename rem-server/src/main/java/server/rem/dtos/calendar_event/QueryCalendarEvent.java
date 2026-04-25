@@ -6,9 +6,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class QueryCalendarEventDto {
+public class QueryCalendarEvent {
     private String businessId;
 
     private LocalDate startDate;

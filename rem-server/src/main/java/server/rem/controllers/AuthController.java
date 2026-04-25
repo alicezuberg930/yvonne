@@ -45,16 +45,17 @@ public class AuthController {
 
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
-                AuthMessages.LOGIN_SUCCESS(signInResponse.getUser().getFullname()),
+                AuthMessages.SIGN_IN_SUCCESS(signInResponse.getUser().getFullname()),
                 signInResponse));
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<APIResponse<SignUpUserRequest>> signUp(@Valid @RequestBody SignUpUserRequest dto) {
+    public ResponseEntity<APIResponse<UserProfileResponse>> signUp(@Valid @RequestBody SignUpUserRequest dto) {
+        UserProfileResponse user = authService.signUp(dto);
         return ResponseEntity.status(201).body(APIResponse.success(
                 201,
-                "User signed up successfully",
-                authService.signUp(dto)));
+                AuthMessages.SIGN_UP_SUCCESS(user.getFullname()),
+                user));
     }
 
     @JsonView(Views.Public.class)

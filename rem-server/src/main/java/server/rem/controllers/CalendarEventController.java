@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.calendar_event.CreateCalendarEventDto;
-import server.rem.dtos.calendar_event.QueryCalendarEventDto;
+import server.rem.dtos.calendar_event.QueryCalendarEvent;
 import server.rem.entities.CalendarEvent;
 import server.rem.services.CalendarEventService;
 
@@ -32,7 +32,7 @@ public class CalendarEventController {
     }
 
     @GetMapping
-    public ResponseEntity<APIResponse<List<CalendarEvent>>> getCalendarEvents(@ModelAttribute QueryCalendarEventDto dto) {
+    public ResponseEntity<APIResponse<List<CalendarEvent>>> getCalendarEvents(@ModelAttribute QueryCalendarEvent dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Calendar event list retrieved successfully",

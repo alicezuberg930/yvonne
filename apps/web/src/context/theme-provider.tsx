@@ -57,26 +57,28 @@ export function ThemeProvider({
   }, [theme])
 
   useEffect(() => {
-    const root = window.document.documentElement
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    if (typeof window !== 'undefined') {
+      const root = window.document.documentElement
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
-    const applyTheme = (currentResolvedTheme: ResolvedTheme) => {
-      root.classList.remove('light', 'dark') // Remove existing theme classes
-      root.classList.add(currentResolvedTheme) // Add the new theme class
-    }
-
-    const handleChange = () => {
-      if (theme === 'system') {
-        const systemTheme = mediaQuery.matches ? 'dark' : 'light'
-        applyTheme(systemTheme)
+      const applyTheme = (currentResolvedTheme: ResolvedTheme) => {
+        root.classList.remove('light', 'dark') // Remove existing theme classes
+        root.classList.add(currentResolvedTheme) // Add the new theme class
       }
+
+      const handleChange = () => {
+        if (theme === 'system') {
+          const systemTheme = mediaQuery.matches ? 'dark' : 'light'
+          applyTheme(systemTheme)
+        }
+      }
+
+      applyTheme(resolvedTheme)
+
+      mediaQuery.addEventListener('change', handleChange)
+
+      return () => mediaQuery.removeEventListener('change', handleChange)
     }
-
-    applyTheme(resolvedTheme)
-
-    mediaQuery.addEventListener('change', handleChange)
-
-    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [theme, resolvedTheme])
 
   const setTheme = (theme: Theme) => {

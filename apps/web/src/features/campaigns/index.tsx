@@ -19,7 +19,7 @@ export function Campaigns() {
   useEffect(() => {
     const getCampaigns = async () => {
       const response = await gc()
-      setCampaigns(response.data)
+      setCampaigns(response.data.content)
     }
     getCampaigns()
   }, [])

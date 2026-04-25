@@ -44,6 +44,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:web": "turbo run build --filter=rem-web-dashboard",
     "dev:web": "turbo run dev --filter=rem-web-dashboard",
     "dev:server": "cd rem-server && ./mvnw spring-boot:run",
     "deps:bump": "bunx npm-check-updates --deep -u && bun install",

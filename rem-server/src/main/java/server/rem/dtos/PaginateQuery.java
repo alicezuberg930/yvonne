@@ -1,15 +1,12 @@
-package server.rem.dtos.campaign;
+package server.rem.dtos;
 
 import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class QueryCampaignDto {
+public class PaginateQuery {
     private String limit;
 
     private String page;
-
-    private String businessId;
 }

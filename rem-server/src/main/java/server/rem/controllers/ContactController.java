@@ -14,7 +14,7 @@ import server.rem.dtos.APIResponse;
 import server.rem.dtos.CustomPageResponse;
 import server.rem.dtos.contact.ContactResponse;
 import server.rem.dtos.contact.CreateContactDto;
-import server.rem.dtos.contact.QueryContactDto;
+import server.rem.dtos.contact.QueryContact;
 import server.rem.entities.Contact;
 import server.rem.services.ContactService;
 import server.rem.views.Views;
@@ -28,12 +28,15 @@ public class ContactController {
     // @JsonView(Views.Public.class)
     @GetMapping
     // @PreAuthorize("hasAuthority('contact.read')")
-    public ResponseEntity<APIResponse<CustomPageResponse<ContactResponse>>> getContactList(@ModelAttribute QueryContactDto dto) {
+    public ResponseEntity<APIResponse<CustomPageResponse<ContactResponse>>> getContactList(
+        @ModelAttribute QueryContact dto, 
+        @RequestAttribute("businessId") String businessId
+    ) {
         return ResponseEntity.ok(
             APIResponse.success(
                 200, 
                 "Contact list fetched successfully", 
-                contactService.getContactList(dto)
+                contactService.getContactList(dto, businessId)
             )
         );
     }

@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.attendance.AttendanceDto;
-import server.rem.dtos.attendance.QueryAttendanceDto;
+import server.rem.dtos.attendance.QueryAttendance;
 import server.rem.entities.Attendance;
 import server.rem.services.AttendanceService;
 
@@ -31,16 +31,16 @@ public class AttendanceController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<APIResponse<Page<Attendance>>> getMyAttendances(@RequestUser String userId, @ModelAttribute QueryAttendanceDto dto) {
+    public ResponseEntity<APIResponse<Page<Attendance>>> getMyAttendances(@ModelAttribute QueryAttendance dto, @RequestUser String userId) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Attendance list retrieved successfully",
-            attendanceService.getMyAttendances(userId, dto)
+            attendanceService.getMyAttendances(dto, userId)
         ));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<APIResponse<Page<Attendance>>> getAllAttendances(@ModelAttribute QueryAttendanceDto dto) {
+    public ResponseEntity<APIResponse<Page<Attendance>>> getAllAttendances(@ModelAttribute QueryAttendance dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Attendance list retrieved successfully",

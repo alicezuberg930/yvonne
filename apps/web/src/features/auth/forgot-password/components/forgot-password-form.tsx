@@ -8,15 +8,6 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { sleep, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { FormProvider, RHFTextField } from '@/components/hook-form'
 import { FieldGroup } from '@/components/ui/field'
 

@@ -22,8 +22,10 @@ export function DirectionProvider({ children }: { children: React.ReactNode }) {
   const [dir, _setDir] = useState<Direction>(() => (getCookie(DIRECTION_COOKIE_NAME) as Direction) || DEFAULT_DIRECTION)
 
   useEffect(() => {
-    const htmlElement = document.documentElement
-    htmlElement.setAttribute('dir', dir)
+    if (typeof window !== 'undefined') {
+      const htmlElement = document.documentElement
+      htmlElement.setAttribute('dir', dir)
+    }
   }, [dir])
 
   const setDir = (dir: Direction) => {

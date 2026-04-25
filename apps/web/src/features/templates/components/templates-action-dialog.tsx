@@ -17,7 +17,7 @@ import { TemplateValidators } from '@/validators/template'
 import { createTemplate, updateTemplate } from '@/lib/repository/api'
 import { toast } from 'sonner'
 import { HttpError } from '@/lib/repository/httpError'
-import { inlineQuillStyles } from '@/lib/utils'
+// import { inlineQuillStyles } from '@/lib/utils'
 
 type TemplateActionDialogProps = {
   currentRow?: Template
@@ -55,9 +55,9 @@ export function TemplatesActionDialog({
     const submit = async () => {
       values = {
         ...values,
-        header: inlineQuillStyles(values.header),
-        body: inlineQuillStyles(values.body),
-        footer: inlineQuillStyles(values.footer),
+        // header: inlineQuillStyles(values.header),
+        // body: inlineQuillStyles(values.body),
+        // footer: inlineQuillStyles(values.footer),
       }
       let response
       try {

@@ -1,30 +1,19 @@
 'use client'
-import { useState } from 'react'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconFacebook, IconGithub } from '@/assets/brand-icons'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/password-input'
 import { FormProvider, RHFPasswordField, RHFTextField } from '@/components/hook-form'
 import { FieldGroup } from '@/components/ui/field'
 import { AuthValidators } from '@/validators/auth'
+import { useAuth } from '@/context/auth-provider'
 
 export function SignUpForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [isLoading, setIsLoading] = useState(false)
+  const { signUp } = useAuth()
 
   const form = useForm<AuthValidators.SignUp>({
     resolver: zodResolver(AuthValidators.signUpSchema),
@@ -35,17 +24,9 @@ export function SignUpForm({
     },
   })
 
-  const { handleSubmit } = form
+  const { handleSubmit, formState: { isSubmitting } } = form
 
-  function onSubmit(data: AuthValidators.SignUp) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-  }
+  const onSubmit = async (data: AuthValidators.SignUp) => await signUp(data)
 
   return (
     <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)}>
@@ -53,51 +34,6 @@ export function SignUpForm({
         className={cn('grid gap-3', className)}
         {...props}
       >
-        {/* <FormField
-          control={form.control}
-          name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl
-                render={() => {
-                  <Input placeholder='name@example.com' {...field} />
-                }}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl
-                render={() => {
-                  <PasswordInput placeholder='********' {...field} />
-                }}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='confirmPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl
-                render={() => {
-                  <PasswordInput placeholder='********' {...field} />
-                }}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FieldGroup>
           <RHFTextField
             name="fullname"
@@ -113,7 +49,6 @@ export function SignUpForm({
           />
           <RHFTextField
             name="email"
-            type="email"
             fieldLabel="Email"
             placeholder="name@example.com"
           />
@@ -129,7 +64,7 @@ export function SignUpForm({
           />
         </FieldGroup>
 
-        <Button className='mt-2' disabled={isLoading} type='submit'>
+        <Button className='mt-2' disabled={isSubmitting} type='submit'>
           Create Account
         </Button>
 
@@ -149,7 +84,7 @@ export function SignUpForm({
             variant='outline'
             className='w-full'
             type='button'
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
             <IconGithub className='h-4 w-4' /> GitHub
           </Button>
@@ -157,7 +92,7 @@ export function SignUpForm({
             variant='outline'
             className='w-full'
             type='button'
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
             <IconFacebook className='h-4 w-4' /> Facebook
           </Button>
