@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -7,7 +8,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AuthLayout } from '../auth-layout'
-import { SignInForm } from './components/sign-in-form'
+import dynamic from 'next/dynamic'
+
+const SignInForm = dynamic(
+  () => import('./components/sign-in-form').then(mod => mod.SignInForm),
+  { ssr: false }
+)
 
 export function SignIn() {
   return (

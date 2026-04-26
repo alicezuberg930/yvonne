@@ -43,7 +43,6 @@ export function NewBusinessDialog({
     const { handleSubmit, reset, setValue } = form
 
     const onSubmit = async (values: BusinessValidators.BusinessForm) => {
-        console.log(values)
         const submit = async () => {
             try {
                 if (values.logoUrl instanceof File) {

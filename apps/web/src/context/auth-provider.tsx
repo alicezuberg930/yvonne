@@ -154,23 +154,17 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     // const { lastTokenRefresh } = useSelector(state => state.app)
 
     useEffect(() => {
-        const profile = async () => {
-            try {
-                const response = await profileApi()
-                let role = getCookie("X-Business-Id") ? response.data.businesses.find(b => b.id === getCookie("X-Business-Id"))?.role ?? null : null
-                dispatch({
-                    type: Types.INITIAL,
-                    payload: {
-                        user: response.data,
-                        isAuthenticated: true,
-                        role
-                    }
-                })
-            } catch (err) {
-                // toast.error(err instanceof Error ? err.message : 'Sign in failed')
-            }
-        }
-        profile()
+        profileApi().then(res => {
+            let role = getCookie("X-Business-Id") ? res.data.businesses.find(b => b.id === getCookie("X-Business-Id"))?.role ?? null : null
+            dispatch({
+                type: Types.INITIAL,
+                payload: {
+                    user: res.data,
+                    isAuthenticated: true,
+                    role
+                }
+            })
+        })
     }, [state.isAuthenticated])
 
     const getCurrentRole = useCallback(async (businessId: string) => {

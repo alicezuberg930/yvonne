@@ -2,7 +2,6 @@ import { useFormContext, Controller } from 'react-hook-form'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { PasswordInput } from '../password-input'
 
 type RHFTextFieldProps = React.ComponentProps<"input"> & {
     name: string
@@ -57,34 +56,6 @@ export const RHFTextArea = ({
                 <Field data-invalid={invalid}>
                     <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
                     <Textarea
-                        {...other}
-                        {...field}
-                        id={field.name}
-                        aria-invalid={invalid}
-                        autoComplete="off"
-                    />
-                    {invalid && <FieldError errors={[error]} />}
-                </Field>
-            )}
-        />
-    )
-}
-
-export const RHFPasswordField = ({
-    name,
-    fieldLabel,
-    ...other
-}: RHFTextFieldProps) => {
-    const { control } = useFormContext()
-
-    return (
-        <Controller
-            name={name}
-            control={control}
-            render={({ field, fieldState: { error, invalid } }) => (
-                <Field data-invalid={invalid}>
-                    <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
-                    <PasswordInput
                         {...other}
                         {...field}
                         id={field.name}

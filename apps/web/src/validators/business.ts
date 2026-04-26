@@ -1,7 +1,6 @@
 import { MAIL_PROVIDER, PHONE_PROVIDER } from '@/@types'
 import * as z from 'zod'
-// SMTP, EXCHANGE, SENDGRID, RESEND, MAILGUN, AMAZON_SES, POSTMARK, OTHER
-// TWILIO, VONAGE, OTHER
+
 export namespace BusinessValidators {
     const businessMailProviderSchema = z.union(Object.entries(MAIL_PROVIDER).map(provider => z.literal(provider[1])))
 

@@ -6,10 +6,15 @@ import { Plus } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Typography } from "@/components/ui/typography"
-// import { setCookie } from "@/lib/cookies"
+import { setCookie } from "@/lib/cookies"
 import { useAuth } from "@/context/auth-provider"
-import { NewBusinessDialog } from "./components/new-business-dialog"
 import useDialogState from "@/hooks/use-dialog-state"
+import dynamic from "next/dynamic"
+
+const NewBusinessDialog = dynamic(
+  () => import('./components/new-business-dialog').then(mod => mod.NewBusinessDialog),
+  { ssr: false }
+)
 
 const roleColors: Record<string, string> = {
     'Owner': 'bg-blue-100 text-blue-800',
@@ -24,7 +29,7 @@ export default function BusinessesPage() {
     const [open, setOpen] = useDialogState<"add">(null)
 
     const accessBusiness = async (businessId: string) => {
-        // setCookie("X-Business-Id", businessId)
+        setCookie("X-Business-Id", businessId)
         getCurrentRole(businessId)
         router.push('/dashboard')
     }

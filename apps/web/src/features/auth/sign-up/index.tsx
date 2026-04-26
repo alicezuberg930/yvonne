@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import {
   Card,
@@ -8,7 +9,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AuthLayout } from '../auth-layout'
-import { SignUpForm } from './components/sign-up-form'
+import dynamic from 'next/dynamic'
+
+const SignUpForm = dynamic(
+  () => import('./components/sign-up-form').then(mod => mod.SignUpForm),
+  { ssr: false }
+)
 
 export function SignUp() {
   return (
