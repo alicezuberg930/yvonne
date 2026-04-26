@@ -19,19 +19,6 @@ public class SecurityConfig {
         private static final String[] PUBLIC_ROUTES = {
                         "/auth/sign-in",
                         "/auth/sign-up",
-                        // "/businesses/**",
-                        // "/leaves/**",
-                        // "/users/**",
-                        // "/attendances/**",
-                        // "/payrolls/**",
-                        // "/customer-groups/**",
-                        // "/tags/**",
-                        // "/contacts/**",
-                        // "/templates/**",
-                        // "/sms/**",
-                        // "/upload/**"
-                        // "/campaigns/**",
-                        // "/security/**"
         };
 
         private final JwtAuthFilter jwtAuthFilter;

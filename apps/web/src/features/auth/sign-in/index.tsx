@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import { AuthLayout } from '../auth-layout'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 
 const SignInForm = dynamic(
   () => import('./components/sign-in-form').then(mod => mod.SignInForm),
@@ -22,8 +23,14 @@ export function SignIn() {
         <CardHeader>
           <CardTitle className='text-lg tracking-tight'>Sign in</CardTitle>
           <CardDescription>
-            Enter your email and password below to <br />
-            log into your account
+            Enter your email and password below to log into your account <br />
+            Don't have an account? {' '}
+            <Link
+              href='/sign-up'
+              className='underline underline-offset-4 hover:text-primary'
+            >
+              Sign up
+            </Link>
           </CardDescription>
         </CardHeader>
         <CardContent>

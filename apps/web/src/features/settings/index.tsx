@@ -1,4 +1,4 @@
-import { Monitor, Bell, Palette, Wrench, UserCog } from 'lucide-react'
+import { Monitor, Bell, Palette, Wrench, UserCog, Briefcase } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/layout/header'
@@ -9,6 +9,11 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { SidebarNav } from './components/sidebar-nav'
 
 const sidebarNavItems = [
+  {
+    title: 'Business',
+    href: '/settings/business',
+    icon: <Briefcase size={18} />,
+  },
   {
     title: 'Profile',
     href: '/settings/profile',
@@ -55,7 +60,7 @@ export function Settings({ children }: { children: React.ReactNode }) {
             Settings
           </h1>
           <p className='text-muted-foreground'>
-            Manage your account settings and set e-mail preferences.
+            Manage your business settings and set e-mail preferences.
           </p>
         </div>
         <Separator className='my-4 lg:my-6' />

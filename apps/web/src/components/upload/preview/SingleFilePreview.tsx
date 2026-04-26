@@ -16,7 +16,7 @@ export default function SingleFilePreview({ file }: Readonly<Props>) {
     format = fileFormat(file.path)
     imgUrl = format === 'image' ? file.preview! : fileThumb(format)
   }
-
+  console.log(imgUrl)
   return (
     <img
       alt='file preview'

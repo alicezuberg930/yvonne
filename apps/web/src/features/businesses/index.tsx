@@ -12,8 +12,8 @@ import useDialogState from "@/hooks/use-dialog-state"
 import dynamic from "next/dynamic"
 
 const NewBusinessDialog = dynamic(
-  () => import('./components/new-business-dialog').then(mod => mod.NewBusinessDialog),
-  { ssr: false }
+    () => import('./components/new-business-dialog').then(mod => mod.NewBusinessDialog),
+    { ssr: false }
 )
 
 const roleColors: Record<string, string> = {
@@ -45,7 +45,7 @@ export default function BusinessesPage() {
                     >
                         <div className="relative w-full h-48 bg-muted">
                             <Image
-                                src={business.logoUrl ?? "./assets/placeholder.webp"}
+                                src={business.logoUrl ?? "/assets/placeholder.webp"}
                                 alt={business.name}
                                 fill
                                 className="object-cover"

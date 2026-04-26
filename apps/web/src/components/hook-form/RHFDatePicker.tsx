@@ -7,6 +7,7 @@ import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { Calendar } from '../ui/calendar'
 import { Input } from '../ui/input'
+import { cn } from '@/lib/utils'
 
 type RHFDatePickerProps = Omit<DayPickerProps, 'mode'> & {
     placeholder?: string
@@ -55,9 +56,12 @@ export function RHFSingleDatePicker({
                             <PopoverTrigger
                                 render={
                                     <Button
-                                        variant={invalid ? 'destructive' : 'outline'}
+                                        variant='outline'
                                         data-empty={!field.value}
-                                        className='justify-start text-start font-normal data-[empty=true]:text-muted-foreground'
+                                        className={cn(
+                                            'justify-start text-start font-normal data-[empty=true]:text-muted-foreground',
+                                            invalid && "border-destructive ring-3 ring-destructive/20 dark:border-destructive/50 dark:ring-destructive/40"
+                                        )}
                                     >
                                         {field.value ? (
                                             withTime ? (
@@ -133,9 +137,12 @@ export function RHFRangeDatePicker({
                             <PopoverTrigger
                                 render={
                                     <Button
-                                        variant={invalid ? 'destructive' : 'outline'}
+                                        variant='outline'
                                         data-empty={!range?.from}
-                                        className='justify-start text-start font-normal data-[empty=true]:text-muted-foreground'
+                                        className={cn(
+                                            'justify-start text-start font-normal data-[empty=true]:text-muted-foreground',
+                                            invalid && "border-destructive ring-3 ring-destructive/20 dark:border-destructive/50 dark:ring-destructive/40"
+                                        )}
                                     >
                                         {formatDisplay()}
                                         <CalendarIcon className='ms-auto h-4 w-4 opacity-50' />

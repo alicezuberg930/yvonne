@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { ApiResponse, Role } from './@types'
 import { httpClient } from './lib/repository/httpClient'
 import { HttpError } from './lib/repository/httpError'
- 
+
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
     const token = request.cookies.get('X-Access-Token')?.value
@@ -50,6 +50,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
+        '/',
         '/settings/:path*',
         '/apps',
         '/dashboard',

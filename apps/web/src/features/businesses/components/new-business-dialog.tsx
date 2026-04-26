@@ -10,14 +10,15 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import { FormProvider, RHFTextField } from '@/components/hook-form'
+import { FormProvider, RHFTextArea, RHFTextField } from '@/components/hook-form'
 import { FieldGroup } from '@/components/ui/field'
 import { toast } from 'sonner'
 import { HttpError } from '@/lib/repository/httpError'
 import { BusinessValidators } from '@/validators/business'
 import { RHFUpload } from '@/components/hook-form/RHFUpload'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { createBusiness, uploadFile } from '@/lib/repository/api'
+import { slugify } from '@/lib/utils'
 
 type CampaignActionDialogProps = {
     open: boolean
@@ -33,22 +34,27 @@ export function NewBusinessDialog({
         defaultValues: {
             name: 'Rem Solution',
             description: 'Rem outsource company, a place for worshipping rem',
-            slug: 'rem-solution',
-            logoUrl: null,
+            slug: '',
+            // logoUrl: null,
             workStartTime: undefined,
             insuranceContributionSalary: "1000000",
         },
     })
 
-    const { handleSubmit, reset, setValue } = form
+    const { handleSubmit, reset } = form
+
+    useEffect(() => {
+        const subscription = form.watch((value, { name }) => {
+            if (name === "name") {
+                form.setValue("slug", slugify(value.name || ""))
+            }
+        })
+        return () => subscription.unsubscribe()
+    }, [form])
 
     const onSubmit = async (values: BusinessValidators.BusinessForm) => {
         const submit = async () => {
             try {
-                if (values.logoUrl instanceof File) {
-                    let imgResponse = await uploadFile(values.logoUrl as File, "/business-logo");
-                    values = { ...values, logoUrl: imgResponse.data }
-                }
                 return await createBusiness(values)
             } catch (error) {
                 throw error
@@ -65,16 +71,6 @@ export function NewBusinessDialog({
             }
         )
     }
-
-    const handleDropThumbnail = useCallback((acceptedFiles: File[]) => {
-        const file = acceptedFiles[0]
-        if (!file) return
-        const img = new window.Image()
-        img.src = URL.createObjectURL(file)
-        const newFile = Object.assign(file, { preview: URL.createObjectURL(file) })
-        setValue('logoUrl', newFile, { shouldValidate: true })
-    }, [setValue])
-
 
     return (
         <Dialog
@@ -99,11 +95,12 @@ export function NewBusinessDialog({
                                     name='name'
                                     fieldLabel='Name'
                                 />
-                                <RHFTextField
+                                <RHFTextArea
                                     name='description'
                                     fieldLabel='Description'
                                 />
                                 <RHFTextField
+                                    disabled
                                     name='slug'
                                     fieldLabel='Slug'
                                 />
@@ -116,14 +113,6 @@ export function NewBusinessDialog({
                                     type='number'
                                     name='insuranceContributionSalary'
                                     fieldLabel='Insurance Contribution Salary'
-                                />
-                                <RHFUpload
-                                    multiple={false}
-                                    name='logoUrl'
-                                    maxSize={15728640}
-                                    onDrop={handleDropThumbnail}
-                                    onDelete={() => setValue('logoUrl', null, { shouldValidate: true })}
-                                    fieldLabel={('song_audio_file')}
                                 />
                             </FieldGroup>
                         </div>
