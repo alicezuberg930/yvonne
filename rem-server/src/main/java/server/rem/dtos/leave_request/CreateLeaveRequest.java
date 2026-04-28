@@ -3,30 +3,28 @@ package server.rem.dtos.leave_request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import server.rem.enums.LeaveStatus;
+import lombok.experimental.SuperBuilder;
 import server.rem.enums.LeaveType;
 
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UpdateLeaveRequestDto {
+@SuperBuilder
+public class CreateLeaveRequest {
+    @NotBlank(message = "Business id is required")
+    private final String businessId;
+
     @NotNull(message = "Start date is required")
-    private LocalDate startDate;
+    private final LocalDate startDate;
 
     @NotNull(message = "End date is required")
-    private LocalDate endDate;
+    private final LocalDate endDate;
 
-    private Double days;
+    private final Double days;
 
     @NotNull(message = "Leave type is required")
-    private LeaveType type;
+    private final LeaveType type;
 
     @NotBlank(message = "Reason is required")
-    private String reason;
-
-    private LeaveStatus status;
-
-    private String approverNote;
+    private final String reason;
 }

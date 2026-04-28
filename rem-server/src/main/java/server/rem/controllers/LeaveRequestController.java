@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.leave_request.CreateLeaveRequestDto;
-import server.rem.dtos.leave_request.QueryLeaveRequestDto;
-import server.rem.dtos.leave_request.UpdateLeaveRequestDto;
+import server.rem.dtos.leave_request.CreateLeaveRequest;
+import server.rem.dtos.leave_request.QueryLeaveRequest;
+import server.rem.dtos.leave_request.UpdateLeaveRequest;
 import server.rem.entities.LeaveRequest;
 import server.rem.services.LeaveRequestService;
 
@@ -23,7 +23,7 @@ public class LeaveRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<APIResponse<LeaveRequest>> createLeaveRequest(@RequestUser String userId, @Valid @RequestBody CreateLeaveRequestDto dto) {
+    public ResponseEntity<APIResponse<LeaveRequest>> createLeaveRequest(@RequestUser String userId, @Valid @RequestBody CreateLeaveRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             201,
             "Leave request created successfully",
@@ -32,7 +32,7 @@ public class LeaveRequestController {
     }
 
     @GetMapping
-    public ResponseEntity<APIResponse<Page<LeaveRequest>>> getAllUsers(@ModelAttribute QueryLeaveRequestDto dto) {
+    public ResponseEntity<APIResponse<Page<LeaveRequest>>> getAllUsers(@ModelAttribute QueryLeaveRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Leave request list retrieved successfully",
@@ -41,7 +41,7 @@ public class LeaveRequestController {
     }
 
     @PutMapping("/{leaveId}")
-    public ResponseEntity<APIResponse<LeaveRequest>> updateLeaveRequest(@PathVariable String leaveId, @Valid @RequestBody UpdateLeaveRequestDto dto, @RequestUser String userId) {
+    public ResponseEntity<APIResponse<LeaveRequest>> updateLeaveRequest(@PathVariable String leaveId, @Valid @RequestBody UpdateLeaveRequest dto, @RequestUser String userId) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Leave request updated successfully",
@@ -50,7 +50,7 @@ public class LeaveRequestController {
     }
 
     @PutMapping("/status/{leaveId}")
-    public ResponseEntity<APIResponse<LeaveRequest>> updateLeaveRequestStatus(@PathVariable String leaveId, @Valid @RequestBody UpdateLeaveRequestDto dto, @RequestUser String userId) {
+    public ResponseEntity<APIResponse<LeaveRequest>> updateLeaveRequestStatus(@PathVariable String leaveId, @Valid @RequestBody UpdateLeaveRequest dto, @RequestUser String userId) {
         return ResponseEntity.ok().body(APIResponse.success(
             200,
             "Leave request status updated successfully",

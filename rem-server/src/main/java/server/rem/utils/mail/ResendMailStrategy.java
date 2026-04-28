@@ -21,7 +21,7 @@ public class ResendMailStrategy implements MailStrategy {
     public void send(MailMessage message) throws Exception {
         Resend resend = new Resend(business.getResendApiKey());
         CreateEmailOptions.Builder builder = CreateEmailOptions.builder()
-                .from(business.getName() + " <no-reply@" + business.getResendEmail() + ">")
+                .from(String.format("%s <no-reply@%s>", business.getName(), business.getResendEmail()))
                 .to(message.getTo())
                 .subject(message.getSubject())
                 .html(message.getHtmlBody());

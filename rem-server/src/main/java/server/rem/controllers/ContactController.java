@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import server.rem.dtos.APIResponse;
 import server.rem.dtos.CustomPageResponse;
 import server.rem.dtos.contact.ContactResponse;
-import server.rem.dtos.contact.CreateContactDto;
+import server.rem.dtos.contact.CreateContactRequest;
 import server.rem.dtos.contact.QueryContact;
 import server.rem.entities.Contact;
 import server.rem.services.ContactService;
@@ -49,13 +49,13 @@ public class ContactController {
  
     @PostMapping
     // @PreAuthorize("hasAuthority('contact.create')")
-    public ResponseEntity<APIResponse<Contact>> create(@Valid @RequestBody CreateContactDto dto) {
+    public ResponseEntity<APIResponse<Contact>> create(@Valid @RequestBody CreateContactRequest dto) {
         return ResponseEntity.ok(APIResponse.success(201, "Contact created", contactService.create(dto)));
     }
  
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('contact.edit')")
-    public ResponseEntity<APIResponse<Contact>> update(@PathVariable String id, @Valid @RequestBody CreateContactDto dto) {
+    public ResponseEntity<APIResponse<Contact>> update(@PathVariable String id, @Valid @RequestBody CreateContactRequest dto) {
         return ResponseEntity.ok(APIResponse.success(200, "Contact updated", contactService.update(id, dto)));
     }
  

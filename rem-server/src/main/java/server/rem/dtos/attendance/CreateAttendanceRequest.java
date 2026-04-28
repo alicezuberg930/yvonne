@@ -10,29 +10,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AttendanceDto {
+public class CreateAttendanceRequest {
     @NotNull(message = "Check in time must not be null")
-    private LocalDateTime checkInTime;
+    private final LocalDateTime checkInTime;
 
-    private String businessId;
+    private final String businessId;
 
-    private LocalDateTime checkOutTime;
+    private final LocalDateTime checkOutTime;
 
-    private LocalDate date;
+    private final LocalDate date;
 
-    private CheckInType type;
+    private final CheckInType type;
 
-    private String note;
+    private final String note;
 
     @NotBlank(message = "Address cannot be blank")
-    private String address;
+    private final String address;
 
     @NotBlank(message = "Latitude cannot be blank")
-    private BigDecimal latitude;
+    private final BigDecimal latitude;
 
     @NotBlank(message = "Longitude cannot be blank")
-    private BigDecimal longitude;
+    private final BigDecimal longitude;
 }

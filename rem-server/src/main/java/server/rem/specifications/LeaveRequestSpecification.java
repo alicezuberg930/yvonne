@@ -2,14 +2,14 @@ package server.rem.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import server.rem.dtos.leave_request.QueryLeaveRequestDto;
+import server.rem.dtos.leave_request.QueryLeaveRequest;
 import server.rem.entities.LeaveRequest;
 
 import java.time.LocalDate;
 
 public class LeaveRequestSpecification {
 
-    public static Specification<LeaveRequest> withFilters(QueryLeaveRequestDto dto) {
+    public static Specification<LeaveRequest> withFilters(QueryLeaveRequest dto) {
         return Specification
                 .where(hasBusinessId(dto.getBusinessId()))
                 .and(hasStartDate(dto.getStartDate()))

@@ -1,4 +1,4 @@
-package server.rem.dtos.calendar_event;
+package server.rem.dtos.leave_request;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,12 +8,11 @@ import java.time.LocalDate;
 
 @Getter
 @SuperBuilder
-public class QueryCalendarEvent extends QueryPaginate {
+public class QueryLeaveRequest extends QueryPaginate {
     private final String businessId;
 
     private final LocalDate startDate;
 
     private final LocalDate endDate;
 
-    private final String createdById;
 }

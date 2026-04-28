@@ -3,7 +3,7 @@ package server.rem.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import server.rem.dtos.tag.CreateContactTagDto;
+import server.rem.dtos.tag.CreateContactTagRequest;
 import server.rem.entities.Business;
 import server.rem.entities.ContactTag;
 import server.rem.mappers.ContactTagMapper;
@@ -33,7 +33,7 @@ public class ContactTagService {
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
     }
  
-    public ContactTag create(CreateContactTagDto dto) {
+    public ContactTag create(CreateContactTagRequest dto) {
         // if (contactTagRepository.existsByName(dto.getName())) {
         //     throw new RuntimeException("Tag with name '" + dto.getName() + "' already exists");
         // }
@@ -43,7 +43,7 @@ public class ContactTagService {
         return contactTagRepository.save(tag);
     }
  
-    public ContactTag update(String id, CreateContactTagDto dto) {
+    public ContactTag update(String id, CreateContactTagRequest dto) {
         ContactTag tag = getById(id);
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new ResourceNotFoundException("Business not found"));

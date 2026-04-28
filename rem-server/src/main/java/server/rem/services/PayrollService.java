@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import server.rem.dtos.payroll.CreatePayrollPeriodDto;
+import server.rem.dtos.payroll.CreatePayrollPeriodRequest;
 import server.rem.entities.Allowance;
 import server.rem.entities.Attendance;
 import server.rem.entities.Business;
@@ -51,7 +51,7 @@ public class PayrollService {
     private final WorkingDaysCalculator workingDaysCalculator;
     private final TaxCalculator taxCalculator;
 
-    public PayrollPeriod createPeriod(CreatePayrollPeriodDto dto) {
+    public PayrollPeriod createPeriod(CreatePayrollPeriodRequest dto) {
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new ResourceNotFoundException("No business found"));
         PayrollPeriod payrollPeriod = PayrollPeriodMapper.toEntity(dto);

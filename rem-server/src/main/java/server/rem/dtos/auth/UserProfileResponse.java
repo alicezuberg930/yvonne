@@ -10,37 +10,35 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserProfileResponse {
     @JsonView(Views.Public.class)
-    private String id;
+    private final String id;
 
     @JsonView(Views.Public.class)
-    private String avatar;
+    private final String avatar;
 
     @JsonView(Views.Public.class)
-    private String birthday;
+    private final String birthday;
 
     @JsonView(Views.Public.class)
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     @JsonView(Views.Public.class)
-    private String fullname;
+    private final String fullname;
 
     @JsonView(Views.Public.class)
-    private String email;
+    private final String email;
 
     @JsonView(Views.Public.class)
-    private String phone;
+    private final String phone;
 
     @JsonView(Views.Public.class)
-    private Provider provider;
+    private final Provider provider;
 
     @JsonView(Views.Public.class)
-    private Boolean isVerified;
+    private final Boolean isVerified;
 
     @JsonView(Views.Public.class)
-    private List<UserBusinessResponse> businesses;
+    private final List<UserBusinessResponse> businesses;
 }

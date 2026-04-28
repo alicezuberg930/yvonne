@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.customer_group.CreateCustomerGroupDto;
-import server.rem.dtos.customer_group.QueryCustomerGroupDto;
+import server.rem.dtos.customer_group.CreateCustomerGroupRequest;
+import server.rem.dtos.customer_group.QueryCustomerGroup;
 import server.rem.entities.CustomerGroup;
 import server.rem.services.CustomerGroupService;
  
@@ -20,7 +20,7 @@ public class CustomerGroupController {
     private final CustomerGroupService customerGroupService;
  
     @GetMapping
-    public ResponseEntity<APIResponse<List<CustomerGroup>>> getCustomerGroupList(@ModelAttribute QueryCustomerGroupDto dto) {
+    public ResponseEntity<APIResponse<List<CustomerGroup>>> getCustomerGroupList(@ModelAttribute QueryCustomerGroup dto) {
         return ResponseEntity.ok(APIResponse.success(
             200, 
             "Customer groups fetched sucessfully", 
@@ -38,7 +38,7 @@ public class CustomerGroupController {
     }
  
     @PostMapping
-    public ResponseEntity<APIResponse<CustomerGroup>> create(@Valid @RequestBody CreateCustomerGroupDto dto) {
+    public ResponseEntity<APIResponse<CustomerGroup>> create(@Valid @RequestBody CreateCustomerGroupRequest dto) {
         return ResponseEntity.ok(APIResponse.success(
             201, 
             "Customer group created", 
@@ -47,7 +47,7 @@ public class CustomerGroupController {
     }
  
     @PutMapping("/{id}")
-    public ResponseEntity<APIResponse<CustomerGroup>> update(@PathVariable String id, @Valid @RequestBody CreateCustomerGroupDto dto) {
+    public ResponseEntity<APIResponse<CustomerGroup>> update(@PathVariable String id, @Valid @RequestBody CreateCustomerGroupRequest dto) {
         return ResponseEntity.ok(APIResponse.success(
             200, 
             "Customer group updated", 

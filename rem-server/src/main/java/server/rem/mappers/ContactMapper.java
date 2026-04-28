@@ -3,7 +3,7 @@ package server.rem.mappers;
 import org.mapstruct.*;
 
 import server.rem.dtos.contact.ContactResponse;
-import server.rem.dtos.contact.CreateContactDto;
+import server.rem.dtos.contact.CreateContactRequest;
 import server.rem.entities.Business;
 import server.rem.entities.Contact;
 import server.rem.entities.ContactTag;
@@ -39,7 +39,7 @@ public interface ContactMapper {
     @Mapping(target = "country", source = "dto.country")
     @Mapping(target = "zipCode", source = "dto.zipCode")
     @Mapping(target = "campaigns", ignore = true)
-    Contact toEntity(CreateContactDto dto, Business business, ContactTag tag, CustomerGroup customerGroup);
+    Contact toEntity(CreateContactRequest dto, Business business, ContactTag tag, CustomerGroup customerGroup);
 
     @Mapping(target = "business", source = "business")
     @Mapping(target = "tag", source = "tag")
@@ -72,7 +72,7 @@ public interface ContactMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "campaigns", ignore = true)
     void updateEntity(
-            CreateContactDto dto,
+            CreateContactRequest dto,
             Business business,
             ContactTag tag,
             CustomerGroup customerGroup,

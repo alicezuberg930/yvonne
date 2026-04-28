@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.calendar_event.CreateCalendarEventDto;
+import server.rem.dtos.calendar_event.CreateCalendarEventRequest;
 import server.rem.dtos.calendar_event.QueryCalendarEvent;
 import server.rem.entities.CalendarEvent;
 import server.rem.services.CalendarEventService;
@@ -23,7 +23,7 @@ public class CalendarEventController {
     }
 
     @PostMapping
-    public ResponseEntity<APIResponse<CalendarEvent>> createCalendarEvent(@RequestUser String userId, @Valid @RequestBody CreateCalendarEventDto dto) {
+    public ResponseEntity<APIResponse<CalendarEvent>> createCalendarEvent(@RequestUser String userId, @Valid @RequestBody CreateCalendarEventRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             201,
             "Calendar event created successfully",

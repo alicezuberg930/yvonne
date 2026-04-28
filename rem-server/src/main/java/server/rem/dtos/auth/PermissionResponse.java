@@ -6,13 +6,11 @@ import lombok.*;
 import server.rem.views.Views;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PermissionResponse {
     @JsonView(Views.Public.class)
-    private String name;
+    private final String name;
 
     @JsonView(Views.Public.class)
-    private String description;
+    private final String description;
 }

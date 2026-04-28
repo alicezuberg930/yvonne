@@ -20,7 +20,7 @@ public class CampaignController {
     @PostMapping
     @PreAuthorize("hasAuthority('campaign.create')")
     public ResponseEntity<APIResponse<CampaignResponse>> createCampaign(
-        @Valid @RequestBody CreateCampaignDto dto, 
+        @Valid @RequestBody CreateCampaignRequest dto, 
         @RequestAttribute("businessId") String businessId
     ) throws Exception {
         return ResponseEntity.ok().body(APIResponse.success(
@@ -33,7 +33,7 @@ public class CampaignController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('campaign.edit')")
     public ResponseEntity<APIResponse<CampaignResponse>> updateCampaign(
-        @Valid @RequestBody UpdateCampaignDto dto, 
+        @Valid @RequestBody UpdateCampaignRequest dto, 
         @RequestAttribute("businessId") String businessId,
         @PathVariable String id
     ) throws Exception {

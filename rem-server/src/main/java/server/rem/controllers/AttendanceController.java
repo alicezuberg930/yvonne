@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.attendance.AttendanceDto;
+import server.rem.dtos.attendance.CreateAttendanceRequest;
 import server.rem.dtos.attendance.QueryAttendance;
 import server.rem.entities.Attendance;
 import server.rem.services.AttendanceService;
@@ -22,7 +22,7 @@ public class AttendanceController {
     }
 
     @PostMapping()
-    public ResponseEntity<APIResponse<Attendance>> checkIn(@RequestUser String userId, @Valid @RequestBody AttendanceDto dto) {
+    public ResponseEntity<APIResponse<Attendance>> checkIn(@RequestUser String userId, @Valid @RequestBody CreateAttendanceRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
             201,
             "Check in successfully",

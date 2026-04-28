@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.rem.annotations.RequestUser;
-import server.rem.dtos.leave_request.CreateLeaveRequestDto;
-import server.rem.dtos.leave_request.QueryLeaveRequestDto;
-import server.rem.dtos.leave_request.UpdateLeaveRequestDto;
+import server.rem.dtos.leave_request.CreateLeaveRequest;
+import server.rem.dtos.leave_request.QueryLeaveRequest;
+import server.rem.dtos.leave_request.UpdateLeaveRequest;
 import server.rem.entities.Business;
 import server.rem.entities.LeaveRequest;
 import server.rem.entities.User;
@@ -35,7 +35,7 @@ public class LeaveRequestService {
         this.businessRepository = businessRepository;
     }
 
-    public LeaveRequest createLeaveRequest(@RequestUser String userId, CreateLeaveRequestDto dto) {
+    public LeaveRequest createLeaveRequest(@RequestUser String userId, CreateLeaveRequest dto) {
         Business business = businessRepository.findById(dto.getBusinessId()).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -46,13 +46,13 @@ public class LeaveRequestService {
         return leaveRequestRepository.save(leaveRequest);
     }
 
-    public List<LeaveRequest> getLeaveRequestByUser(String userId, QueryLeaveRequestDto dto) {
+    public List<LeaveRequest> getLeaveRequestByUser(String userId, QueryLeaveRequest dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found"));
 
         return leaveRequestRepository.findAllByUser(user);
     }
 
-    public Page<LeaveRequest> getLeaveRequests(QueryLeaveRequestDto dto) {
+    public Page<LeaveRequest> getLeaveRequests(QueryLeaveRequest dto) {
         Pageable pageable = PageRequest.of(
                 dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
                 dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10
@@ -61,7 +61,7 @@ public class LeaveRequestService {
         return leaveRequestRepository.findAll(spec, pageable);
     }
 
-    public LeaveRequest updateLeaveRequest(String leaveId, UpdateLeaveRequestDto dto, String userId) {
+    public LeaveRequest updateLeaveRequest(String leaveId, UpdateLeaveRequest dto, String userId) {
         LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveId).orElseThrow(() -> new ResourceNotFoundException("Leave request not found"));
         if(!leaveRequest.getStatus().equals(LeaveStatus.PENDING)) throw new RuntimeException("Cannot update leave request after it has been processed");
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -75,7 +75,7 @@ public class LeaveRequestService {
     }
 
     // approve or reject (only team_lead, admin, hr are authorized)
-    public LeaveRequest updateLeaveRequestStatus(String leaveId, UpdateLeaveRequestDto dto, String userId) {
+    public LeaveRequest updateLeaveRequestStatus(String leaveId, UpdateLeaveRequest dto, String userId) {
         LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveId).orElseThrow(() -> new ResourceNotFoundException("Leave request not found"));
         if(!leaveRequest.getStatus().equals(LeaveStatus.PENDING)) throw new RuntimeException("Cannot update leave request after it has been processed");
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));

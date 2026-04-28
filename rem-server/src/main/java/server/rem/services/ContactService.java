@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import server.rem.dtos.CustomPageResponse;
 import server.rem.dtos.contact.ContactResponse;
-import server.rem.dtos.contact.CreateContactDto;
+import server.rem.dtos.contact.CreateContactRequest;
 import server.rem.dtos.contact.QueryContact;
 import server.rem.entities.Business;
 import server.rem.entities.Contact;
@@ -49,7 +49,7 @@ public class ContactService {
                 .orElseThrow(() -> new RuntimeException("Contact not found"));
     }
 
-    public Contact create(CreateContactDto dto) {
+    public Contact create(CreateContactRequest dto) {
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));
         ContactTag tag = contactTagRepository.findById(dto.getTagId())
@@ -64,7 +64,7 @@ public class ContactService {
         return contactRepository.save(contact);
     }
 
-    public Contact update(String id, CreateContactDto dto) {
+    public Contact update(String id, CreateContactRequest dto) {
         Contact contact = getById(id);
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));

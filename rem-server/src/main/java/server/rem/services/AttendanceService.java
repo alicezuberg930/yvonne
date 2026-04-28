@@ -26,7 +26,7 @@ public class AttendanceService {
     private final UserRepository userRepository;
     private final BusinessRepository businessRepository;
 
-    public Attendance checkIn(String userId, AttendanceDto dto) {
+    public Attendance checkIn(String userId, CreateAttendanceRequest dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Business business = businessRepository.findById(dto.getBusinessId()).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
         if (attendanceRepository.existsByBusinessAndUserAndDate(business, user, LocalDate.now())){

@@ -46,7 +46,7 @@ public class BusinessService {
     }
 
     @Transactional
-    public Business createBusinesses(String ownerId, CreateBusinessDto dto) {
+    public Business createBusinesses(String ownerId, CreateBusinessRequest dto) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         // user cannot create more than 3 businesses
         List<BusinessUser> ownedBusinesses = owner.getBusinessUsers().stream().filter(b -> b.getRole().getName().equals("OWNER")).collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class BusinessService {
     }
 
     @Transactional
-    public User addUserToBusiness(String invitorId, AddUserToBusinessDto dto, String businessId) throws Exception {
+    public User addUserToBusiness(String invitorId, AddUserToBusinessRequest dto, String businessId) throws Exception {
         businessUserRepository.findByUserEmailAndBusinessId(dto.getEmail(), businessId).ifPresent((bu) -> {
             throw new ConflictException(BusinessMessages.ALREADY_INVITED);
         }); 
@@ -100,7 +100,7 @@ public class BusinessService {
         return user;
     }
 
-    public Business updateBusiness(String businessId, UpdateBusinessDto dto) {
+    public Business updateBusiness(String businessId, UpdateBusinessRequest dto) {
         Business business = businessRepository.findById(businessId).orElseThrow(() -> new ResourceNotFoundException("No business found"));
         businessMapper.updateEntity(dto, business);
         dynamicMail.updateMailStrategy(business);

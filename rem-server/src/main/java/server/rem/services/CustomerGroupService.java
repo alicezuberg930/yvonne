@@ -3,8 +3,8 @@ package server.rem.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import server.rem.dtos.customer_group.CreateCustomerGroupDto;
-import server.rem.dtos.customer_group.QueryCustomerGroupDto;
+import server.rem.dtos.customer_group.CreateCustomerGroupRequest;
+import server.rem.dtos.customer_group.QueryCustomerGroup;
 import server.rem.entities.Business;
 import server.rem.entities.CustomerGroup;
 import server.rem.mappers.CustomerGroupMapper;
@@ -21,7 +21,7 @@ public class CustomerGroupService {
     private final BusinessRepository businessRepository;
     private final CustomerGroupMapper customerGroupMapper;
 
-    public List<CustomerGroup> getCustomerGroupList(QueryCustomerGroupDto dto) {
+    public List<CustomerGroup> getCustomerGroupList(QueryCustomerGroup dto) {
         Business business = businessRepository.findById(dto.getBusinessId()).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
         return customerGroupRepository.findByBusiness(business);
     }
@@ -31,7 +31,7 @@ public class CustomerGroupService {
                 .orElseThrow(() -> new RuntimeException("Customer group not found"));
     }
 
-    public CustomerGroup create(CreateCustomerGroupDto dto) {
+    public CustomerGroup create(CreateCustomerGroupRequest dto) {
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));
         // if (customerGroupRepository.existsByNameAndBusinessId(dto.getName(), dto.getBusinessId())) {
@@ -41,7 +41,7 @@ public class CustomerGroupService {
         return customerGroupRepository.save(group);
     }
 
-    public CustomerGroup update(String id, CreateCustomerGroupDto dto) {
+    public CustomerGroup update(String id, CreateCustomerGroupRequest dto) {
         CustomerGroup group = getById(id);
         Business business = businessRepository.findById(dto.getBusinessId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));

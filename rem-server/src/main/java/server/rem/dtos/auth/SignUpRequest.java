@@ -7,33 +7,31 @@ import server.rem.enums.Provider;
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SignUpUserRequest {
+public class SignUpRequest {
     @NotBlank(message = "Fullname is required")
     @Size(max = 100)
-    private String fullname;
+    private final String fullname;
 
     @Size(max = 10)
-    private String phone;
+    private final String phone;
 
     // Optional
     @Size(max = 255)
-    private String avatar;
+    private final String avatar;
 
     // Optional (default can be handled in service)
-    private Provider provider;
+    private final Provider provider;
 
     // Optional
-    private LocalDate birthday;
+    private final LocalDate birthday;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     @Size(max = 100)
-    private String email;
+    private final String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
-    private String password;
+    private final String password;
 }

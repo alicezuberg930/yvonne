@@ -1,11 +1,11 @@
 package server.rem.mappers;
 
-import server.rem.dtos.attendance.AttendanceDto;
+import server.rem.dtos.attendance.CreateAttendanceRequest;
 import server.rem.entities.Attendance;
 import server.rem.enums.CheckInType;
 
 public class AttendanceMapper {
-    public static Attendance toEntity(AttendanceDto dto) {
+    public static Attendance toEntity(CreateAttendanceRequest dto) {
         return Attendance.builder()
                 .checkInTime(dto.getCheckInTime())
                 .checkOutTime(dto.getCheckOutTime())

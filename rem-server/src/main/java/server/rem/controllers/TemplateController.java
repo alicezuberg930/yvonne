@@ -18,8 +18,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import server.rem.common.messages.TemplateMessages;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.template.CreateTemplateDto;
-import server.rem.dtos.template.UpdateTemplateDto;
+import server.rem.dtos.template.CreateTemplateRequest;
+import server.rem.dtos.template.UpdateTemplateRequest;
 import server.rem.entities.Template;
 import server.rem.services.TemplateService;
 
@@ -32,7 +32,7 @@ public class TemplateController {
     @PostMapping
     @PreAuthorize("hasAuthority('template.create')")
     public ResponseEntity<APIResponse<Template>> createTemplate(
-        @Valid @RequestBody CreateTemplateDto dto,         
+        @Valid @RequestBody CreateTemplateRequest dto,         
         @RequestAttribute("businessId") String businessId
     ) {
         return ResponseEntity.ok().body(APIResponse.success(
@@ -45,7 +45,7 @@ public class TemplateController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('template.edit')")
     public ResponseEntity<APIResponse<Template>> updateTemplate(
-        @Valid @RequestBody UpdateTemplateDto dto,
+        @Valid @RequestBody UpdateTemplateRequest dto,
         @PathVariable String id,  
         @RequestAttribute("businessId") String businessId
     ) {

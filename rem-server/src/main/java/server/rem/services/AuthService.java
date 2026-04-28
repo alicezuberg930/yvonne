@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import server.rem.dtos.auth.RoleResponse;
-import server.rem.dtos.auth.SignInUserRequest;
-import server.rem.dtos.auth.SignInUserResponse;
-import server.rem.dtos.auth.SignUpUserRequest;
+import server.rem.dtos.auth.SignInRequest;
+import server.rem.dtos.auth.SignInResponse;
+import server.rem.dtos.auth.SignUpRequest;
 import server.rem.dtos.auth.UserProfileResponse;
 import server.rem.entities.BusinessUser;
 import server.rem.entities.User;
@@ -50,7 +50,7 @@ public class AuthService {
         return authMapper.toRoleResponse(businessUser.getRole());
     }
 
-    public SignInUserResponse signIn(SignInUserRequest dto) {
+    public SignInResponse signIn(SignInRequest dto) {
         try {
             JWTOptions options = new JWTOptions();
             options.setExpiresIn(Long.parseLong(jwtExpirationInS));
@@ -80,7 +80,7 @@ public class AuthService {
         }
     }
 
-    public UserProfileResponse signUp(SignUpUserRequest dto) {
+    public UserProfileResponse signUp(SignUpRequest dto) {
         User user = UserMapper.toEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

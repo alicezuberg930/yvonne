@@ -7,18 +7,17 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreatePayrollPeriodDto {
+public class CreatePayrollPeriodRequest {
     @NotBlank(message = "Business id is required")
-    private String businessId;
+    private final String businessId;
 
     @NotBlank(message = "Name is required")
-    private String name;
+    private final String name;
 
     @NotNull(message = "Start date is required")
-    private LocalDate startDate;
+    private final LocalDate startDate;
 
     @NotNull(message = "End date is required")
-    private LocalDate endDate;
+    private final LocalDate endDate;
 }

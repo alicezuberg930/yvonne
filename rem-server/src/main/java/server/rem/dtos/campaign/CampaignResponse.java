@@ -10,31 +10,29 @@ import server.rem.dtos.template.TemplateResponse;
 import server.rem.views.Views;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CampaignResponse {
     @JsonView(Views.Public.class)
-    private String id;
+    private final String id;
 
     @JsonView(Views.Public.class)
-    private String name;
+    private final String name;
 
     @JsonView(Views.Public.class)
-    private String description;
+    private final String description;
 
     @JsonView(Views.Public.class)
-    private String sendType;
+    private final String sendType;
 
     @JsonView(Views.Public.class)
-    private String scheduleAt;
+    private final String scheduleAt;
 
     @JsonView(Views.Public.class)
-    private String status;
+    private final String status;
 
     @JsonView(Views.Public.class)
-    private TemplateResponse template;
+    private final TemplateResponse template;
 
     @JsonView(Views.Public.class)
-    private List<ContactResponse> contacts;
+    private final List<ContactResponse> contacts;
 }

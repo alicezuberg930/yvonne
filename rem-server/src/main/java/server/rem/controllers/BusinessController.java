@@ -27,7 +27,7 @@ public class BusinessController {
     final private BusinessService businessService;
 
     @PostMapping
-    public ResponseEntity<APIResponse<Business>> createBusiness(@RequestUser String userId, @Valid @RequestBody CreateBusinessDto dto) {
+    public ResponseEntity<APIResponse<Business>> createBusiness(@RequestUser String userId, @Valid @RequestBody CreateBusinessRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
                 BusinessMessages.CREATED,
@@ -46,7 +46,7 @@ public class BusinessController {
     }
 
     @PostMapping("/add/{businessId}")
-    public ResponseEntity<APIResponse<User>> addUserToBusiness(@RequestUser String invitorId, @Valid @RequestBody AddUserToBusinessDto dto, @PathVariable String businessId) throws MessagingException {
+    public ResponseEntity<APIResponse<User>> addUserToBusiness(@RequestUser String invitorId, @Valid @RequestBody AddUserToBusinessRequest dto, @PathVariable String businessId) throws MessagingException {
         try {
                 return ResponseEntity.ok().body(APIResponse.success(
                 200,
@@ -60,7 +60,7 @@ public class BusinessController {
     }
 
     @PutMapping("/{businessId}")
-    public ResponseEntity<APIResponse<Business>> updateBusiness(@PathVariable String businessId, @RequestBody UpdateBusinessDto dto) {
+    public ResponseEntity<APIResponse<Business>> updateBusiness(@PathVariable String businessId, @RequestBody UpdateBusinessRequest dto) {
         return ResponseEntity.ok().body(APIResponse.success(
                 200,
                 "Business updated successfully",

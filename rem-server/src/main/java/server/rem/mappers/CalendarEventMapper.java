@@ -1,10 +1,10 @@
 package server.rem.mappers;
 
-import server.rem.dtos.calendar_event.CreateCalendarEventDto;
+import server.rem.dtos.calendar_event.CreateCalendarEventRequest;
 import server.rem.entities.CalendarEvent;
 
 public class CalendarEventMapper {
-    public static CalendarEvent toEntity(CreateCalendarEventDto dto) {
+    public static CalendarEvent toEntity(CreateCalendarEventRequest dto) {
         return CalendarEvent.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())

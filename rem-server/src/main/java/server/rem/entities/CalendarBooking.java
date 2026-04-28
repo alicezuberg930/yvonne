@@ -1,6 +1,6 @@
 package server.rem.entities;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,10 +35,10 @@ public class CalendarBooking extends Base {
     private Contact contact;
 
     @Column(name = "booking__start_date", nullable = false)
-    private LocalDateTime bookingStartDate;
+    private Instant bookingStartDate;
 
     @Column(name = "booking_end_date", nullable = false)
-    private LocalDateTime bookingEndDate;
+    private Instant bookingEndDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)

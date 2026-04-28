@@ -9,30 +9,29 @@ import lombok.*;
 import server.rem.enums.CalendarEventType;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateCalendarEventDto {
+public class CreateCalendarEventRequest {
     @NotBlank(message = "Business id is required")
-    private String businessId;
+    private final String businessId;
 
     @NotBlank(message = "Title is required")
-    private String title;
+    private final String title;
 
-    private String description;
+    private final String description;
 
     @NotNull(message = "Start date is required")
-    private LocalDate startDate;
+    private final LocalDate startDate;
 
     @NotNull(message = "End date is required")
-    private LocalDate endDate;
+    private final LocalDate endDate;
 
     @NotNull(message = "End time is required")
-    private LocalTime startTime;
+    private final LocalTime startTime;
 
     @NotNull(message = "End time is required")
-    private LocalTime endTime;
+    private final LocalTime endTime;
 
     @NotNull(message = "Calendar type is required")
-    private CalendarEventType type;
+    private final CalendarEventType type;
 
 }

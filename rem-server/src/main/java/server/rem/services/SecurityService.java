@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import server.rem.dtos.security.CreatePermissionDto;
-import server.rem.dtos.security.CreateRoleDto;
+import server.rem.dtos.security.CreatePermissionRequest;
+import server.rem.dtos.security.CreateRoleRequest;
 import server.rem.entities.Role;
 import server.rem.entities.Permission;
 import server.rem.mappers.PermissionMapper;
@@ -169,12 +169,12 @@ public class SecurityService {
         // This typically involves updating the role's permissions in the database
     }
 
-    public Role createRole(CreateRoleDto dto) {
+    public Role createRole(CreateRoleRequest dto) {
         Role role = roleMapper.toEntity(dto);
         return roleRepository.save(role);
     }
 
-    public Permission createPermission(CreatePermissionDto dto) {
+    public Permission createPermission(CreatePermissionRequest dto) {
         Permission permission = permissionMapper.toEntity(dto);
         return permissionRepository.save(permission);
     }

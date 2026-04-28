@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import server.rem.annotations.RequestUser;
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.payroll.CreatePayrollPeriodDto;
+import server.rem.dtos.payroll.CreatePayrollPeriodRequest;
 import server.rem.entities.PayrollItem;
 import server.rem.entities.PayrollPeriod;
 import server.rem.services.PayrollService;
@@ -29,7 +29,7 @@ public class PayrollController {
     }
 
     @PostMapping("/period")
-    public ResponseEntity<APIResponse<PayrollPeriod>> createPeriod(@Valid @RequestBody CreatePayrollPeriodDto dto) {
+    public ResponseEntity<APIResponse<PayrollPeriod>> createPeriod(@Valid @RequestBody CreatePayrollPeriodRequest dto) {
         return ResponseEntity.status(201).body(APIResponse.success(
             201,
             "Payroll period created successfully",

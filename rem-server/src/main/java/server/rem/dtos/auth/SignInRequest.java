@@ -4,13 +4,12 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SignInUserRequest {
+public class SignInRequest {
     @NotBlank
     @Email
-    private String email;
+    private final String email;
 
     @NotBlank
-    private String password;
+    private final String password;
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import server.rem.dtos.calendar_event.CreateCalendarEventDto;
+import server.rem.dtos.calendar_event.CreateCalendarEventRequest;
 import server.rem.dtos.calendar_event.QueryCalendarEvent;
 import server.rem.entities.Business;
 import server.rem.entities.CalendarEvent;
@@ -23,7 +23,7 @@ public class CalendarEventService {
     private final BusinessRepository businessRepository;
     private final UserRepository userRepository;
 
-    public CalendarEvent createCalendarEvent(CreateCalendarEventDto dto, String userId) {
+    public CalendarEvent createCalendarEvent(CreateCalendarEventRequest dto, String userId) {
         Business business = businessRepository.findById(dto.getBusinessId()).orElseThrow(() -> new ResourceNotFoundException("Business not found"));
         User user =  userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Creator not found"));
         CalendarEvent calendarEvent = CalendarEventMapper.toEntity(dto);

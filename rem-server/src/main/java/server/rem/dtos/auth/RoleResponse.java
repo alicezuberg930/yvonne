@@ -8,16 +8,14 @@ import lombok.*;
 import server.rem.views.Views;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class RoleResponse {
     @JsonView(Views.Public.class)
-    private String name;
+    private final String name;
 
     @JsonView(Views.Public.class)
-    private String description;
+    private final String description;
 
     @JsonView(Views.Public.class)
-    private List<PermissionResponse> permissions;
+    private final List<PermissionResponse> permissions;
 }

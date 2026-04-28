@@ -6,19 +6,16 @@ import lombok.*;
 import server.rem.enums.Color;
  
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-public class CreateContactTagDto {
+public class CreateContactTagRequest {
     @NotBlank(message = "Business ID is required")
-    private String businessId;
+    private final String businessId;
 
     @NotBlank(message = "Tag name is required")
-    private String name;
+    private final String name;
  
     @NotNull(message = "Color is required")
-    private Color color;
+    private final Color color;
  
-    private Boolean isActive;
+    private final Boolean isActive;
 }

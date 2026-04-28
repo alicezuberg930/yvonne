@@ -6,7 +6,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import server.rem.dtos.auth.PermissionResponse;
 import server.rem.dtos.auth.RoleResponse;
-import server.rem.dtos.auth.SignInUserResponse;
+import server.rem.dtos.auth.SignInResponse;
 import server.rem.dtos.auth.UserBusinessResponse;
 import server.rem.dtos.auth.UserProfileResponse;
 import server.rem.dtos.business.BusinessResponse;
@@ -46,5 +46,5 @@ public interface AuthMapper {
 
     @Mapping(target = "accessToken", source = "accessToken")
     @Mapping(target = "user.businesses", ignore = true)
-    SignInUserResponse toResponse(User user, String accessToken);
+    SignInResponse toResponse(User user, String accessToken);
 }

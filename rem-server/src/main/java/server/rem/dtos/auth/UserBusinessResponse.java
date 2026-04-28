@@ -9,41 +9,39 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserBusinessResponse {
     @JsonUnwrapped // flattens all BusinessResponse fields into this object
     @JsonView(Views.Public.class)
-    private BusinessResponse business;
-    
-    @JsonView(Views.Public.class)
-    private String isActive;
+    private final BusinessResponse business;
 
     @JsonView(Views.Public.class)
-    private String isVerified;
+    private final String isActive;
 
     @JsonView(Views.Public.class)
-    private Integer salary;
+    private final String isVerified;
 
     @JsonView(Views.Public.class)
-    private String bankOwner;
+    private final Integer salary;
 
     @JsonView(Views.Public.class)
-    private String bankAccount;
+    private final String bankOwner;
 
     @JsonView(Views.Public.class)
-    private String bankName;
+    private final String bankAccount;
 
     @JsonView(Views.Public.class)
-    private String bankCode;
+    private final String bankName;
 
     @JsonView(Views.Public.class)
-    private String bankBranch;
+    private final String bankCode;
 
     @JsonView(Views.Public.class)
-    private Integer dependants;
+    private final String bankBranch;
 
     @JsonView(Views.Public.class)
-    private RoleResponse role;
+    private final Integer dependants;
+
+    @JsonView(Views.Public.class)
+    private final RoleResponse role;
 }

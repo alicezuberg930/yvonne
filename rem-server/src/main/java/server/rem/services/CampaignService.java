@@ -39,12 +39,11 @@ public class CampaignService {
     private final CampaignScheduler campaignScheduler;
 
     @Transactional
-    public CampaignResponse createCampaign(CreateCampaignDto dto, String businessId) throws Exception {
+    public CampaignResponse createCampaign(CreateCampaignRequest dto, String businessId) throws Exception {
         Business business = businessRepository.findById(businessId).orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
         Template template = templateRepository.findById(dto.getTemplateId()).orElseThrow(() -> new ResourceNotFoundException(TemplateMessages.NOT_FOUND));
         List<Contact> contacts = contactRepository.findAllById(dto.getContactIds());
         if(contacts.size() == 0) throw new ResourceNotFoundException("No contacts found");
-        System.out.println(contacts.get(0).toString());
         Campaign campaign = campaignRepository.save(campaignMapper.toEntity(dto, business, template, contacts));
         if(dto.getSendType().equals(CampaignSendType.SCHEDULED) && dto.getScheduleAt() == null) throw new BadRequestException(CampaignMessages.INVALID_DATE);
         if(dto.getSendType().equals(CampaignSendType.IMMEDIATE)){
@@ -57,7 +56,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignResponse updateCampaign(UpdateCampaignDto dto, String businessId, String id) throws Exception {
+    public CampaignResponse updateCampaign(UpdateCampaignRequest dto, String businessId, String id) throws Exception {
         Business business = businessRepository.findById(businessId).orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
         Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CampaignMessages.NOT_FOUND));
         Optional<Template> template = templateRepository.findById(dto.getTemplateId());

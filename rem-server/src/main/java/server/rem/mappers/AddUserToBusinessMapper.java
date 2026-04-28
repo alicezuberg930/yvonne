@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import server.rem.dtos.business.AddUserToBusinessDto;
+import server.rem.dtos.business.AddUserToBusinessRequest;
 import server.rem.entities.Business;
 import server.rem.entities.BusinessUser;
 import server.rem.entities.Role;
@@ -17,7 +17,7 @@ public interface AddUserToBusinessMapper {
     @Mapping(target = "role", source = "role")
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "invitor", ignore = true)
-    BusinessUser toBusinessUserEntity(AddUserToBusinessDto dto, Business business, Role role);
+    BusinessUser toBusinessUserEntity(AddUserToBusinessRequest dto, Business business, Role role);
 
     @Mapping(target = "provider", ignore = true)
     @Mapping(target = "password", ignore = true)
@@ -26,7 +26,7 @@ public interface AddUserToBusinessMapper {
     @Mapping(target = "verifyToken", ignore = true)
     @Mapping(target = "verifyTokenExpires", ignore = true)
     @Mapping(target = "avatar", ignore = true)
-    User toUserEntity(AddUserToBusinessDto dto);
+    User toUserEntity(AddUserToBusinessRequest dto);
 
     // @Mapping(target = "id", ignore = true)
     // @Mapping(target = "business", ignore = true)

@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus;
 public class APIResponse<T> {
     @JsonView(Views.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
     @JsonView(Views.Public.class)
-    private int status;
+    private final int status;
     @JsonView(Views.Public.class)
-    private String message;
+    private final String message;
     @JsonView(Views.Public.class)
-    private T data;
+    private final T data;
 
     public APIResponse(int status, String message, T data) {
         this.timestamp = LocalDateTime.now();

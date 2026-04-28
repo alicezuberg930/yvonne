@@ -2,16 +2,12 @@ package server.rem.dtos.customer_group;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
- 
+import lombok.experimental.SuperBuilder;
+import server.rem.dtos.QueryPaginate;
+
 @Getter
-@AllArgsConstructor
-@Builder
-@ToString
-public class QueryCustomerGroupDto {
+@SuperBuilder
+public class QueryCustomerGroup extends QueryPaginate {
     @NotBlank()
     private final String businessId;
-
-    private final Integer page;
-
-    private final Integer limit;
 }

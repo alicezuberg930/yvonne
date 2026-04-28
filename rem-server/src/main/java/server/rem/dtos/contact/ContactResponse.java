@@ -6,79 +6,77 @@ import lombok.*;
 import server.rem.views.Views;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ContactResponse {
     @JsonView(Views.Public.class)
-    private String id;
+    private final String id;
 
     @JsonView(Views.Public.class)
-    private String type;
+    private final String type;
 
     @JsonView(Views.Public.class)
-    private String firstName;
+    private final String firstName;
 
     @JsonView(Views.Public.class)
-    private String lastName;
+    private final String lastName;
 
     @JsonView(Views.Public.class)
-    private String surname;
+    private final String surname;
 
     @JsonView(Views.Public.class)
-    private String phone;
+    private final String phone;
 
     @JsonView(Views.Public.class)
-    private String mobilePhone;
+    private final String mobilePhone;
 
     @JsonView(Views.Public.class)
-    private String email;
+    private final String email;
 
     @JsonView(Views.Public.class)
-    private String birthday;
+    private final String birthday;
 
     @JsonView(Views.Public.class)
-    private String occupation;
+    private final String occupation;
 
     @JsonView(Views.Public.class)
-    private String taxCode;
+    private final String taxCode;
 
     @JsonView(Views.Public.class)
-    private String website;
+    private final String website;
 
     @JsonView(Views.Public.class)
-    private String facebook;
+    private final String facebook;
 
     @JsonView(Views.Public.class)
-    private String instagram;
+    private final String instagram;
 
     @JsonView(Views.Public.class)
-    private String zalo;
+    private final String zalo;
 
     @JsonView(Views.Public.class)
-    private String identityCard;
+    private final String identityCard;
 
     @JsonView(Views.Public.class)
-    private String identityIssuedOn;
+    private final String identityIssuedOn;
 
     @JsonView(Views.Public.class)
-    private String identityIssuedAt;
+    private final String identityIssuedAt;
 
     @JsonView(Views.Public.class)
-    private String insuranceNumber;
+    private final String insuranceNumber;
 
     @JsonView(Views.Public.class)
-    private String note;
+    private final String note;
 
     @JsonView(Views.Public.class)
-    private String address1;
+    private final String address1;
 
     @JsonView(Views.Public.class)
-    private String address2;
+    private final String address2;
 
     @JsonView(Views.Public.class)
-    private String country;
+    private final String country;
 
     @JsonView(Views.Public.class)
-    private String zipCode;
+    private final String zipCode;
 }

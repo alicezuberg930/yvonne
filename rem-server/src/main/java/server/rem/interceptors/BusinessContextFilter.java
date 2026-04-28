@@ -21,6 +21,7 @@ import server.rem.entities.User;
 import server.rem.entities.Role;
 import server.rem.entities.Permission;
 import server.rem.repositories.BusinessUserRepository;
+import server.rem.utils.exceptions.UnauthorizedException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -72,6 +73,7 @@ public class BusinessContextFilter extends OncePerRequestFilter {
                 String userId = isUser ? ((User) authentication.getPrincipal()).getId() : null;
                 // Extract businessId from request header
                 String businessId = extractBusinessId(request);
+System.out.println(businessId);
 
                 if (userId != null && businessId != null && !businessId.isEmpty()) {
                     // Check cache first to avoid database queries on every request
@@ -86,7 +88,7 @@ public class BusinessContextFilter extends OncePerRequestFilter {
                         // If permissions are not cached then query from database
                         BusinessUser businessUser = businessUserRepository
                                 .findByUserIdAndBusinessId(userId, businessId)
-                                .orElseThrow(() -> new AccessDeniedException("User does not have access to business: " + businessId));
+                                .orElseThrow(() -> new UnauthorizedException("User does not have access to business: " + businessId));
 
                         Role role = businessUser.getRole();
                         Set<Permission> permissions = role.getPermissions();

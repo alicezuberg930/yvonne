@@ -7,7 +7,7 @@ import com.vonage.client.VonageClient;
 import com.vonage.client.messages.MessageResponse;
 import com.vonage.client.messages.sms.SmsTextRequest;
 import com.twilio.rest.api.v2010.account.Message;
-import server.rem.dtos.sms.SendSmsDto;
+import server.rem.dtos.sms.SendSmsRequest;
 
 @Service
 public class SmsService {
@@ -21,7 +21,7 @@ public class SmsService {
     @Value("${vonage.api-secret}")
     private String vonageApiSecret;
 
-    public void sendSmsTwilio(SendSmsDto dto) {
+    public void sendSmsTwilio(SendSmsRequest dto) {
         try {
             Message msg = Message.creator(
                     new PhoneNumber(dto.getToNumber()),
@@ -39,7 +39,7 @@ public class SmsService {
                  .build();
      }
 
-     public void sendSmsVonage(SendSmsDto dto) {
+     public void sendSmsVonage(SendSmsRequest dto) {
 //         VerifyResponse response = getClient().getVerifyClient().verify("84395417455", "Vonage");
 //
 //         if (response.getStatus() == VerifyStatus.OK) {

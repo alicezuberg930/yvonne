@@ -30,15 +30,15 @@ public class AuthController {
     private String expireIn;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<APIResponse<SignInUserResponse>> signIn(@Valid @RequestBody SignInUserRequest dto, HttpServletResponse response) {
-        SignInUserResponse signInResponse = authService.signIn(dto);
+    public ResponseEntity<APIResponse<SignInResponse>> signIn(@Valid @RequestBody SignInRequest dto, HttpServletResponse response) {
+        SignInResponse signInResponse = authService.signIn(dto);
         ResponseCookie cookie = ResponseCookie
                 .from("X-Access-Token", signInResponse.getAccessToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(Duration.ofSeconds(Long.parseLong(expireIn)))
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<APIResponse<UserProfileResponse>> signUp(@Valid @RequestBody SignUpUserRequest dto) {
+    public ResponseEntity<APIResponse<UserProfileResponse>> signUp(@Valid @RequestBody SignUpRequest dto) {
         UserProfileResponse user = authService.signUp(dto);
         return ResponseEntity.status(201).body(APIResponse.success(
                 201,

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.rem.dtos.APIResponse;
-import server.rem.dtos.tag.CreateContactTagDto;
+import server.rem.dtos.tag.CreateContactTagRequest;
 import server.rem.entities.ContactTag;
 import server.rem.services.ContactTagService;
 
@@ -34,12 +34,12 @@ public class ContactTagController {
     }
 
     @PostMapping
-    public ResponseEntity<APIResponse<ContactTag>> create(@Valid @RequestBody CreateContactTagDto dto) {
+    public ResponseEntity<APIResponse<ContactTag>> create(@Valid @RequestBody CreateContactTagRequest dto) {
         return ResponseEntity.ok(APIResponse.success(201, "Tag created", contactTagService.create(dto)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<APIResponse<ContactTag>> update(@PathVariable String id, @Valid @RequestBody CreateContactTagDto dto) {
+    public ResponseEntity<APIResponse<ContactTag>> update(@PathVariable String id, @Valid @RequestBody CreateContactTagRequest dto) {
         return ResponseEntity.ok(APIResponse.success(200, "Tag updated", contactTagService.update(id, dto)));
     }
 

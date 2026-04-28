@@ -8,33 +8,30 @@ import java.time.LocalTime;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
 public class BusinessResponse {
     @JsonView(Views.Public.class)
-    private String id;
+    private final String id;
 
     @JsonView(Views.Public.class)
-    private String name;
+    private final String name;
 
     @JsonView(Views.Public.class)
-    private String slug;
+    private final String slug;
 
     @JsonView(Views.Public.class)
-    private String logoUrl;
+    private final String logoUrl;
 
     @JsonView(Views.Public.class)
-    private LocalTime workStartTime;
+    private final LocalTime workStartTime;
 
     @JsonView(Views.Public.class)
-    private Integer insuranceContributionSalary;
+    private final Integer insuranceContributionSalary;
 
     @JsonView({ Views.Business.class, Views.Attendance.class })
-    private String twilioAccountSid;
+    private final String twilioAccountSid;
 
     @JsonView(Views.Public.class)
-    private String description;
-    
+    private final String description;
+
 }

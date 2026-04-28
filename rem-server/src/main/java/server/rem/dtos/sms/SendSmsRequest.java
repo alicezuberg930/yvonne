@@ -4,14 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-public class SendSmsDto {
+public class SendSmsRequest {
     @NotBlank(message = "To number is required")
-    private String toNumber;
+    private final String toNumber;
 
     @NotBlank(message = "Text message is required")
-    private String textMessage;
+    private final String textMessage;
 }
