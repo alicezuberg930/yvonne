@@ -1,11 +1,10 @@
 package server.rem.dtos.campaign;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import server.rem.dtos.QueryPaginate;
 
 @Getter
-@SuperBuilder
+@AllArgsConstructor
 public class QueryCampaign extends QueryPaginate {
     private final String contactId;
 }

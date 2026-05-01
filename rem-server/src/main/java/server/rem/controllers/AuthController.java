@@ -70,7 +70,7 @@ public class AuthController {
     @JsonView(Views.Public.class)
     @GetMapping("/role")
     public ResponseEntity<APIResponse<RoleResponse>> getCurrentRole(@RequestUser String userId,
-            @RequestParam("businessId") String businessId) {
+            @RequestAttribute("businessId") String businessId) {
         return ResponseEntity.status(200).body(APIResponse.success(
                 200,
                 "Role fetched successfully",

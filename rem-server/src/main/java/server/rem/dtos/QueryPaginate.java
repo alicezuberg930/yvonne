@@ -1,12 +1,12 @@
 package server.rem.dtos;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Getter
-@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class QueryPaginate {
-    private final String limit;
+    private String limit;
 
-    private final String page;
+    private String page;
 }

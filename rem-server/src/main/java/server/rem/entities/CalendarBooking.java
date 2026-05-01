@@ -26,25 +26,22 @@ public class CalendarBooking extends Base {
     @JoinColumn(name = "correspondent_id", nullable = true)
     private User correspondent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = true)
-    private Branch branch;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 
-    @Column(name = "booking__start_date", nullable = false)
+    @Column(name = "booking_start_date", nullable = false)
     private Instant bookingStartDate;
 
     @Column(name = "booking_end_date", nullable = false)
     private Instant bookingEndDate;
 
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
     @Builder.Default
-    private CalendarBookingStatus type = CalendarBookingStatus.BOOKED;
-    
+    private CalendarBookingStatus status = CalendarBookingStatus.BOOKED;
+
     @Column(name = "cancel_reason", length = 255, nullable = true)
     private String cancelReason;
 }

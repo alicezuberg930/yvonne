@@ -8,7 +8,6 @@ import server.rem.enums.Provider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")

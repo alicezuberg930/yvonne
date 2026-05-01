@@ -1,11 +1,9 @@
 import { Profile } from '@/@types/user'
 import { httpClient } from './httpClient'
 import { AuthValidators } from '@/validators/auth'
-import { Campaign, Role, Template, ApiResponse, PaginatedApiResponse, Contact, Business } from '@/@types'
+import { Campaign, Role, Template, ApiResponse, PaginatedApiResponse, Contact, Business, CalendarBooking } from '@/@types'
 import { getCookie } from '../cookies'
-import { TemplateValidators } from '@/validators/template'
-import { CampaignValidators } from '@/validators/campaign'
-import { BusinessValidators } from '@/validators/business'
+import { BusinessValidators, TemplateValidators, CampaignValidators, BookingValidators } from '@/validators'
 
 // authentication
 export const signIn = async (data: AuthValidators.SignIn): Promise<ApiResponse<{ user: Profile, accessToken: string }>> => {
@@ -91,3 +89,15 @@ export const updateBusiness = async (data: BusinessValidators.BusinessForm): Pro
     return await httpClient.put<ApiResponse<Business>>(`/businesses/${getCookie('X-Business-Id')}`, { ...data })
 }
 
+// bookings management
+export const createBooking = async (data: BookingValidators.BookingForm): Promise<ApiResponse<CalendarBooking>> => {
+    return await httpClient.post<ApiResponse<CalendarBooking>>('/calendar-bookings', { ...data })
+}
+
+export const updateBooking = async (data: BookingValidators.BookingForm, id: string): Promise<ApiResponse<CalendarBooking>> => {
+    return await httpClient.put<ApiResponse<CalendarBooking>>(`/calendar-bookings/${id}`, { ...data })
+}
+
+export const getBookings = async (): Promise<ApiResponse<CalendarBooking[]>> => {
+    return await httpClient.get<ApiResponse<CalendarBooking[]>>('/calendar-bookings')
+}

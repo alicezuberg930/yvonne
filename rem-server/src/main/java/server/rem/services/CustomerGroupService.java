@@ -43,9 +43,7 @@ public class CustomerGroupService {
 
     public CustomerGroup update(String id, CreateCustomerGroupRequest dto) {
         CustomerGroup group = getById(id);
-        Business business = businessRepository.findById(dto.getBusinessId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-        customerGroupMapper.updateEntity(dto, business, group);
+        customerGroupMapper.updateEntity(dto, group);
         return customerGroupRepository.save(group);
     }
 

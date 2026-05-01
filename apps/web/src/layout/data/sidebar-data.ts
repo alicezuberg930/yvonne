@@ -23,7 +23,8 @@ import {
   GalleryVerticalEnd,
   Clock,
   LayoutTemplate,
-  Megaphone
+  Megaphone,
+  BookImage
 } from 'lucide-react'
 import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
@@ -108,6 +109,11 @@ export const sidebarData: SidebarData = {
           title: 'Campaigns',
           url: '/campaigns',
           icon: Megaphone,
+        },
+        {
+          title: 'Bookings',
+          url: '/bookings',
+          icon: BookImage,
         },
       ],
     },

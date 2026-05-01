@@ -22,6 +22,7 @@ public interface BusinessMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "businessUsers", ignore = true)
     void updateEntity(UpdateBusinessRequest dto, @MappingTarget Business entity);
 
     List<BusinessResponse> toBusinessesResponse(List<Business> businesses);

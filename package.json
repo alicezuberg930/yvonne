@@ -47,6 +47,8 @@
     "build:web": "turbo run build --filter=rem-web-dashboard",
     "dev:web": "turbo run dev --filter=rem-web-dashboard",
     "dev:server": "cd rem-server && ./mvnw spring-boot:run",
+    "server:compile": "cd rem-server && ./mvnw clean compile",
+    "server:build": "cd rem-server && ./mvnw clean build -Dskiptests",
     "deps:bump": "bunx npm-check-updates --deep -u && bun install",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

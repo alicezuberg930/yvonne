@@ -41,7 +41,7 @@ public interface ContactMapper {
     @Mapping(target = "campaigns", ignore = true)
     Contact toEntity(CreateContactRequest dto, Business business, ContactTag tag, CustomerGroup customerGroup);
 
-    @Mapping(target = "business", source = "business")
+    @Mapping(target = "business", ignore = true)
     @Mapping(target = "tag", source = "tag")
     @Mapping(target = "customerGroup", source = "customerGroup")
     @Mapping(target = "type", source = "dto.type")
@@ -71,13 +71,7 @@ public interface ContactMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "campaigns", ignore = true)
-    void updateEntity(
-            CreateContactRequest dto,
-            Business business,
-            ContactTag tag,
-            CustomerGroup customerGroup,
-            @MappingTarget Contact contact
-    );
+    void updateEntity(CreateContactRequest dto, ContactTag tag, CustomerGroup customerGroup, @MappingTarget Contact contact);
 
     ContactResponse toContactResponse(Contact contact);
 }

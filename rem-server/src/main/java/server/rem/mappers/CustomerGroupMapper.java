@@ -20,8 +20,8 @@ public interface CustomerGroupMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "business", source = "business")
+    @Mapping(target = "business", ignore = true)
     @Mapping(target = "name", source = "dto.name")
     @Mapping(target = "percentage", source = "dto.percentage")
-    void updateEntity(CreateCustomerGroupRequest dto, Business business, @MappingTarget CustomerGroup group);
+    void updateEntity(CreateCustomerGroupRequest dto, @MappingTarget CustomerGroup group);
 }

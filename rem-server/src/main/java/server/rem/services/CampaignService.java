@@ -57,7 +57,6 @@ public class CampaignService {
 
     @Transactional
     public CampaignResponse updateCampaign(UpdateCampaignRequest dto, String businessId, String id) throws Exception {
-        Business business = businessRepository.findById(businessId).orElseThrow(() -> new ResourceNotFoundException(BusinessMessages.NOT_FOUND));
         Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CampaignMessages.NOT_FOUND));
         Optional<Template> template = templateRepository.findById(dto.getTemplateId());
         List<Contact> contacts = contactRepository.findAllById(dto.getContactIds());
@@ -68,7 +67,7 @@ public class CampaignService {
         if (dto.getSendType() == CampaignSendType.SCHEDULED && !campaign.getScheduleAt().equals(dto.getScheduleAt())) {
             campaign.setStatus(CampaignStatus.PENDING);
         }
-        campaignMapper.updateEntity(dto, business, template.isPresent()? template.get() : null, contacts, campaign);
+        campaignMapper.updateEntity(dto, template.isPresent()? template.get() : null, contacts, campaign);
         Campaign updatedCampaign = campaignRepository.save(campaign);
         if(updatedCampaign.getStatus().equals(CampaignStatus.PENDING)) campaignScheduler.rescheduleCampaign(updatedCampaign);
         return campaignMapper.toCampaignResponse(updatedCampaign);

@@ -1,13 +1,12 @@
 package server.rem.dtos.calendar_event;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import server.rem.dtos.QueryPaginate;
 
 import java.time.LocalDate;
 
 @Getter
-@SuperBuilder
+@AllArgsConstructor
 public class QueryCalendarEvent extends QueryPaginate {
     private final String businessId;
 

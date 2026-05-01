@@ -45,9 +45,7 @@ public class ContactTagService {
  
     public ContactTag update(String id, CreateContactTagRequest dto) {
         ContactTag tag = getById(id);
-        Business business = businessRepository.findById(dto.getBusinessId())
-                .orElseThrow(() -> new ResourceNotFoundException("Business not found"));
-        contactTagMapper.updateEntity(dto, business, tag);
+        contactTagMapper.updateEntity(dto, tag);
         return contactTagRepository.save(tag);
     }
  

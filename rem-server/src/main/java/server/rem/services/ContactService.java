@@ -35,9 +35,8 @@ public class ContactService {
 
     public CustomPageResponse<ContactResponse> getContactList(QueryContact dto, String businessId) {
         Pageable pageable = PageRequest.of(
-            dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
-            dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10
-        );
+                dto.getPage() != null ? Integer.parseInt(dto.getPage()) : 0,
+                dto.getLimit() != null ? Integer.parseInt(dto.getLimit()) : 10);
         Specification<Contact> spec = ContactSpecification.withFilters(dto, businessId);
         Page<ContactResponse> result = contactRepository.findAll(spec, pageable).map(contactMapper::toContactResponse);
         return new CustomPageResponse<ContactResponse>(result);
@@ -66,13 +65,11 @@ public class ContactService {
 
     public Contact update(String id, CreateContactRequest dto) {
         Contact contact = getById(id);
-        Business business = businessRepository.findById(dto.getBusinessId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
         ContactTag tag = contactTagRepository.findById(dto.getTagId())
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
         CustomerGroup customerGroup = resolveCustomerGroup(dto.getCustomerGroupId());
 
-        contactMapper.updateEntity(dto, business, tag, customerGroup, contact);
+        contactMapper.updateEntity(dto, tag, customerGroup, contact);
         return contactRepository.save(contact);
     }
 
